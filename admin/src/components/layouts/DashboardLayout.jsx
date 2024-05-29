@@ -7,7 +7,7 @@ import Scrolltop from "../Scrolltop";
 const DashboardLayout = () => {
   const { currentUser } = useSelector((state) => state.user);
 
-  if (currentUser && currentUser.role !== "admin" && !currentUser.verified) {
+  if (!currentUser) {
     return <Navigate to="/admin/login" />;
   }
 
