@@ -8,7 +8,7 @@ const DashboardLayout = () => {
   const { currentUser } = useSelector((state) => state.user);
 
   if (currentUser && currentUser.role !== "admin" && !currentUser.verified) {
-    return <Navigate to="/" />;
+    return <Navigate to="/admin/login" />;
   }
 
   return (
