@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   LAPTOP_BRANDS,
   LAPTOP_CPUS,
@@ -11,15 +11,12 @@ import {
 } from "../utils/constants";
 import { Button, IconButton, Radio } from "@material-tailwind/react";
 import useGetCategories from "../hooks/useGetCategories";
-import { FaList } from "react-icons/fa6";
-import { FiGrid } from "react-icons/fi";
 import { GoSearch } from "react-icons/go";
 import useMegaFilterProduct from "../../../admin/src/hooks/useMegaFilterProduct";
 import ProductCard, { ProductCardSkeleton } from "../components/ProductCard";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 
 const Product = () => {
-  const [displayUi, setDisplayUi] = useState("grid");
   const {
     products,
     loading,
@@ -32,12 +29,6 @@ const Product = () => {
     handlePrevPage,
     handleResetFilter,
   } = useMegaFilterProduct();
-
-  const handleToggleDisplay = () => {
-    setDisplayUi((prevDisplayUi) =>
-      prevDisplayUi === "grid" ? "list" : "grid"
-    );
-  };
 
   useEffect(() => {
     document.body.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -64,45 +55,26 @@ const Product = () => {
               <strong>{paginate?.totalDocs}</strong> sản phẩm
             </p>
 
-            <div className="flex items-center gap-5">
-              <div className="flex items-center gap-2">
-                <p>Sắp xếp theo: </p>
-                <select
-                  id="sortby"
-                  className="block w-[120px] text-sm p-2 border border-gray-500 rounded-md focus:outline-none focus:border-indigo-500 capitalize "
-                  value={filter.order}
-                  onChange={(e) =>
-                    setFilter({ ...filter, order: e.target.value })
-                  }
-                >
-                  {SORT_STATUS.map((option) => (
-                    <option
-                      className="capitalize"
-                      key={option.label}
-                      value={option.value}
-                    >
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <FaList
-                  size={22}
-                  className={`cursor-pointer ${
-                    displayUi === "list" ? "opacity-100" : "opacity-50"
-                  }`}
-                  onClick={handleToggleDisplay}
-                />
-                <FiGrid
-                  size={22}
-                  className={`cursor-pointer ${
-                    displayUi === "grid" ? "opacity-100" : "opacity-50"
-                  }`}
-                  onClick={handleToggleDisplay}
-                />
-              </div>
+            <div className="flex items-center gap-2">
+              <p>Sắp xếp theo: </p>
+              <select
+                id="sortby"
+                className="block w-[120px] text-sm p-2 border border-gray-500 rounded-md focus:outline-none focus:border-indigo-500 capitalize "
+                value={filter.order}
+                onChange={(e) =>
+                  setFilter({ ...filter, order: e.target.value })
+                }
+              >
+                {SORT_STATUS.map((option) => (
+                  <option
+                    className="capitalize"
+                    key={option.label}
+                    value={option.value}
+                  >
+                    {option.label}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 

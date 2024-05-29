@@ -22,6 +22,10 @@ const VerifyEmail = () => {
     fetchVerifyEmailApi();
   }, [token]);
 
+  useEffect(() => {
+    document.body.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
+
   return (
     <div className="flex items-center h-screen justify-center">
       <section className="bg-white shadow-xl rounded-xl p-8 max-w-lg w-full">

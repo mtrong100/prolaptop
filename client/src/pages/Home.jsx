@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Banner from "../components/Banner";
 import Flashsale from "../components/Flashsale";
 import Banner2 from "../components/Banner2";
@@ -10,6 +10,10 @@ import OurBrand from "../components/OurBrand";
 import Faq from "../components/Faq";
 
 const Home = () => {
+  useEffect(() => {
+    document.body.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
+
   return (
     <div>
       <Banner />

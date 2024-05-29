@@ -9,6 +9,7 @@ import {
 import TitleSection from "../components/TitleSection";
 import { Button, Input, Textarea } from "@material-tailwind/react";
 import Image from "../assets/images/Typing-bro.png";
+import { useEffect } from "react";
 
 const stastisticCard = [
   {
@@ -34,6 +35,11 @@ const stastisticCard = [
 ];
 
 const About = () => {
+  // FIX SCROLL BUG
+  useEffect(() => {
+    document.body.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
+
   return (
     <section className="mt-5">
       {/* BANNER */}

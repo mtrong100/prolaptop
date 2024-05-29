@@ -9,6 +9,9 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import useFavorite from "../hooks/useFavorite";
 import Empty from "../components/Empty";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { addProductToCart } from "../redux/slices/cartSlice";
 
 const TABLE_HEAD = ["Sản phẩm", "Giá tiền", "Danh mục", "Thao tác"];
 
@@ -21,10 +24,8 @@ const Wishlist = () => {
   useEffect(() => {
     async function fetchProducts() {
       setLoading(true);
-
       try {
-        let res = await getAllProductsApi({ category: "Laptop văn phòng" });
-
+        const res = await getAllProductsApi({ category: "Laptop văn phòng" });
         setProducts(res?.docs);
       } catch (error) {
         console.log("Lỗi: ", error);
@@ -33,7 +34,6 @@ const Wishlist = () => {
         setLoading(false);
       }
     }
-
     fetchProducts();
   }, []);
 
@@ -187,18 +187,13 @@ export function TableWithStripedRows({ data = [], onRemoveFavorite }) {
                 />
               </td>
               <td className="p-4">
-                <div className="flex items-center gap-2">
-                  <Button variant="gradient" color="red">
-                    Thêm vào giỏ hàng
-                  </Button>
-                  <Button
-                    onClick={() => onRemoveFavorite(item?._id)}
-                    color="red"
-                    variant="outlined"
-                  >
-                    Xóa
-                  </Button>
-                </div>
+                <Button
+                  color="red"
+                  variant="outlined"
+                  onClick={() => onRemoveFavorite(item?._id)}
+                >
+                  Xóa
+                </Button>
               </td>
             </tr>
           ))}

@@ -110,6 +110,10 @@ const Checkout = () => {
     }
   };
 
+  useEffect(() => {
+    document.body.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
+
   return (
     <div className="mt-10 mb-20">
       <TitleSection>Chi tiết hóa đơn</TitleSection>

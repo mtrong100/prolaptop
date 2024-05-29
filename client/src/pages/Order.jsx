@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import TitleSection from "../components/TitleSection";
 import useGetMyOrder from "../hooks/useGetMyOrder";
 import {
@@ -35,6 +35,10 @@ const Order = () => {
     setStatus,
     status,
   } = useGetMyOrder();
+
+  useEffect(() => {
+    document.body.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
 
   return (
     <div className="mt-10">
