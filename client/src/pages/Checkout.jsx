@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import FieldInput from "../components/form/FieldInput";
-import { formatCurrencyVND } from "../utils/helper";
+import { formatCurrencyVND, randomId } from "../utils/helper";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { createOrderApi, vnPayPaymentApi } from "../api/orderApi";
 import { toast } from "react-toastify";
@@ -112,8 +112,15 @@ const Checkout = () => {
 
   const handleVNPayPayment = async () => {
     try {
+      const id = randomId();
+
       console.log("Calling vnPayPaymentApi...");
-      await vnPayPaymentApi();
+      await vnPayPaymentApi({
+        amount: total,
+        orderId: id,
+        bankCode: "VNBANK",
+        language: "vn",
+      });
     } catch (error) {
       console.log("Error in handleVNPayPayment: ", error);
     }

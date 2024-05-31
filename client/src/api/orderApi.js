@@ -81,9 +81,13 @@ export const cancelOrderApi = async (id) => {
   return res.data;
 };
 
-export const vnPayPaymentApi = async () => {
+export const vnPayPaymentApi = async (req) => {
   const res = await axios.post(
-    `${import.meta.env.VITE_SERVER_URL}/api/order/create_payment_url`
+    `${import.meta.env.VITE_SERVER_URL}/api/order/create_payment_url`,
+    req,
+    {
+      withCredentials: true,
+    }
   );
   return res.data;
 };
