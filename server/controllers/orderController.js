@@ -1,6 +1,12 @@
 import Order from "../models/orderModel.js";
 import Product from "../models/productModel.js";
 import { sendEmailCompletePurchase } from "../services/emailService.js";
+import dotenv from "dotenv";
+import crypto from "crypto";
+import dateFormat from "dateformat";
+import querystring from "qs";
+
+dotenv.config();
 
 const ORDER_QUERY = {
   PAGE: 1,
@@ -242,4 +248,75 @@ export const cancelOrder = async (req, res) => {
     console.error("Error in cancelOrder controller:", error.message);
     return res.status(500).json({ message: "Internal Server Error" });
   }
+};
+
+export const vnPayPayment = async (req, res) => {
+  try {
+    const ipAddr =
+      req.headers["x-forwarded-for"] ||
+      req.connection.remoteAddress ||
+      req.socket.remoteAddress ||
+      (req.connection.socket ? req.connection.socket.remoteAddress : null);
+
+    const tmnCode = process.env.VNPAY_TMN_CODE;
+    const secretKey = process.env.VNPAY_HASH_SECRET;
+    const vnpUrl = process.env.VNPAY_URL;
+    const returnUrl = process.env.VNPAY_RETURN_URL;
+
+    const date = new Date();
+    const createDate = dateFormat(date, "yyyymmddHHmmss");
+    const orderId = dateFormat(date, "HHmmss");
+    const amount = req.body.amount;
+    const bankCode = req.body.bankCode;
+    const orderInfo = req.body.orderDescription;
+    const orderType = req.body.orderType;
+    let locale = req.body.language;
+
+    if (!locale) {
+      locale = "vn";
+    }
+    const currCode = "VND";
+    let vnp_Params = {
+      vnp_Version: "2.1.0",
+      vnp_Command: "pay",
+      vnp_TmnCode: tmnCode,
+      vnp_Locale: locale,
+      vnp_CurrCode: currCode,
+      vnp_TxnRef: orderId,
+      vnp_OrderInfo: orderInfo,
+      vnp_OrderType: orderType,
+      vnp_Amount: amount * 100,
+      vnp_ReturnUrl: returnUrl,
+      vnp_IpAddr: ipAddr,
+      vnp_CreateDate: createDate,
+    };
+
+    if (bankCode) {
+      vnp_Params["vnp_BankCode"] = bankCode;
+    }
+
+    vnp_Params = sortObject(vnp_Params);
+
+    const signData = querystring.stringify(vnp_Params, { encode: false });
+    const hmac = crypto.createHmac("sha512", secretKey);
+    const signed = hmac.update(Buffer.from(signData, "utf-8")).digest("hex");
+    vnp_Params["vnp_SecureHash"] = signed;
+
+    const paymentUrl =
+      vnpUrl + "?" + querystring.stringify(vnp_Params, { encode: false });
+
+    res.redirect(paymentUrl);
+  } catch (error) {
+    console.error("Error in vnPayPayment controller:", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+const sortObject = (obj) => {
+  const sorted = {};
+  const keys = Object.keys(obj).sort();
+  keys.forEach((key) => {
+    sorted[key] = obj[key];
+  });
+  return sorted;
 };

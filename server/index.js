@@ -12,7 +12,12 @@ const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: [process.env.LOCAL_CLIENT_URL, process.env.LOCAL_CLIENT_URL_2],
+    origin: [
+      process.env.LOCAL_CLIENT_URL,
+      process.env.LOCAL_CLIENT_URL_2,
+      process.env.VNPAY_URL,
+      process.env.VNPAY_RETURN_URL,
+    ],
     credentials: true,
   })
 );

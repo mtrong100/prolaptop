@@ -14,7 +14,7 @@ import {
 import FieldInput from "../components/form/FieldInput";
 import { formatCurrencyVND } from "../utils/helper";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
-import { createOrderApi } from "../api/orderApi";
+import { createOrderApi, vnPayPaymentApi } from "../api/orderApi";
 import { toast } from "react-toastify";
 import { filterCart } from "../redux/slices/cartSlice";
 
@@ -107,6 +107,15 @@ const Checkout = () => {
       console.log("Lỗi thanh toán: ", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleVNPayPayment = async () => {
+    try {
+      console.log("Calling vnPayPaymentApi...");
+      await vnPayPaymentApi();
+    } catch (error) {
+      console.log("Error in handleVNPayPayment: ", error);
     }
   };
 
@@ -214,6 +223,16 @@ const Checkout = () => {
                 <IoMdCheckmarkCircleOutline size={20} />
               )}
               {loading ? "Đang chờ..." : "Đặt hàng"}
+            </Button>
+
+            <Button
+              type="button"
+              variant="gradient"
+              color="blue"
+              className="flex rounded-sm w-full items-center gap-3 justify-center"
+              onClick={handleVNPayPayment}
+            >
+              Thanh toán với VN PAY
             </Button>
           </div>
         </form>

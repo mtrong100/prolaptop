@@ -80,3 +80,10 @@ export const cancelOrderApi = async (id) => {
   );
   return res.data;
 };
+
+export const vnPayPaymentApi = async () => {
+  const res = await axios.post(
+    `${import.meta.env.VITE_SERVER_URL}/api/order/create_payment_url`
+  );
+  return res.data;
+};
