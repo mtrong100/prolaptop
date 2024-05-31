@@ -22,6 +22,7 @@ import Empty from "../components/Empty";
 import { SHIPPING_METHOD } from "../utils/constants";
 import useGetCouponCodes from "../hooks/useGetCouponCodes";
 import { formatCurrencyVND } from "../utils/helper";
+import { toast } from "react-toastify";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -61,6 +62,18 @@ const Cart = () => {
           discount: Number(selectedCoupon.discount),
         })
       );
+    }
+  };
+
+  const handleNavigateCheckoutPage = () => {
+    // chech if product has been selected in cart or not
+    const hasSlectedProduct = cart.filter((item) => item.selected);
+
+    if (hasSlectedProduct.length === 0) {
+      toast.error("Vui lòng chọn sản phẩm muốn thanh toán");
+      return;
+    } else {
+      navigate("/checkout");
     }
   };
 
@@ -199,7 +212,7 @@ const Cart = () => {
             </div>
 
             <Button
-              onClick={() => navigate("/checkout")}
+              onClick={handleNavigateCheckoutPage}
               variant="gradient"
               color="red"
               className="flex rounded-none items-center gap-2 w-full justify-center"
