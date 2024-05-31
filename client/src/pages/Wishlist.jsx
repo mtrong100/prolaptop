@@ -4,14 +4,10 @@ import useWishlist from "../hooks/useWishlist";
 import { Button, Chip, Typography } from "@material-tailwind/react";
 import { formatCurrencyVND } from "../utils/helper";
 import { getAllProductsApi } from "../api/productApi";
-import ProductCard, { ProductCardSkeleton } from "../components/ProductCard";
-import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import useFavorite from "../hooks/useFavorite";
 import Empty from "../components/Empty";
-import { useDispatch } from "react-redux";
-import { toast } from "react-toastify";
-import { addProductToCart } from "../redux/slices/cartSlice";
+import CustomSwiper from "../components/CustomSwiper";
 
 const TABLE_HEAD = ["Sản phẩm", "Giá tiền", "Danh mục", "Thao tác"];
 
@@ -66,68 +62,7 @@ const Wishlist = () => {
       <div className="mt-20">
         <TitleSection>Đề xuất cho bạn</TitleSection>
         <div className="mt-5">
-          <Carousel
-            additionalTransfrom={0}
-            arrows
-            autoPlaySpeed={3000}
-            centerMode={false}
-            className=""
-            containerClass="container-with-dots"
-            dotListClass=""
-            draggable
-            focusOnSelect={false}
-            infinite
-            itemClass="carousel-item"
-            keyBoardControl
-            minimumTouchDrag={80}
-            pauseOnHover
-            renderArrowsWhenDisabled={false}
-            renderButtonGroupOutside={false}
-            renderDotsOutside={false}
-            responsive={{
-              desktop: {
-                breakpoint: {
-                  max: 3000,
-                  min: 1024,
-                },
-                items: 4,
-                partialVisibilityGutter: 40,
-              },
-              mobile: {
-                breakpoint: {
-                  max: 464,
-                  min: 0,
-                },
-                items: 1,
-                partialVisibilityGutter: 30,
-              },
-              tablet: {
-                breakpoint: {
-                  max: 1024,
-                  min: 464,
-                },
-                items: 2,
-                partialVisibilityGutter: 30,
-              },
-            }}
-            rewind={false}
-            rewindWithAnimation={false}
-            rtl={false}
-            shouldResetAutoplay
-            showDots={false}
-            sliderClass=""
-            slidesToSlide={1}
-            swipeable
-          >
-            {loading &&
-              Array(12)
-                .fill(0)
-                .map((item, index) => <ProductCardSkeleton key={index} />)}
-
-            {!loading &&
-              products.length > 0 &&
-              products.map((item) => <ProductCard key={item?._id} p={item} />)}
-          </Carousel>
+          <CustomSwiper loading={loading} products={products} />
         </div>
       </div>
     </div>

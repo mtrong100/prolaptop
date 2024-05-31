@@ -9,6 +9,9 @@ import { ThemeProvider } from "@material-tailwind/react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { SocketContextProvider } from "./components/SocketContext.jsx";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
