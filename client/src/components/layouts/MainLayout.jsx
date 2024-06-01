@@ -13,7 +13,6 @@ import Chatbox from "../Chatbox";
 const MainLayout = () => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
-  console.log("🚀 ~ MainLayout ~ currentUser:", currentUser?._id);
   const { handleLogout } = useLogout();
 
   useEffect(() => {
