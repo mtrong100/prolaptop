@@ -310,7 +310,13 @@ export function DialogDefault({ order }) {
                 Ngày: {formatDate(order?.createdAt)}
               </span>
               <span className="text-gray-900">
-                Phương thức thanh toán: {order?.paymentMethod}
+                Phương thức thanh toán:
+                <Chip
+                  variant="ghost"
+                  value={order?.paymentMethod}
+                  size="sm"
+                  className="w-fit inline-block ml-2"
+                />
               </span>
               <span className="text-gray-900">
                 Tình trạng đơn hàng:{" "}
@@ -319,7 +325,7 @@ export function DialogDefault({ order }) {
                   value={order?.status}
                   color={displayStatus(order?.status)}
                   size="sm"
-                  className="w-fit inline-block"
+                  className="w-fit inline-block ml-2"
                 />
               </span>
               {order?.couponCodeUsed && (

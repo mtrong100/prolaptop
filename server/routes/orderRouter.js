@@ -7,7 +7,8 @@ import {
   getOrderCollection,
   updateOrder,
   cancelOrder,
-  vnPayPayment,
+  stripeCheckout,
+  checkoutSession,
 } from "../controllers/orderController.js";
 import { protectedRoute } from "../middlewares/protectedRoute.js";
 
@@ -27,6 +28,8 @@ router.put("/update/:id", protectedRoute, updateOrder);
 
 router.put("/cancel/:id", protectedRoute, cancelOrder);
 
-router.post("/create_payment_url", vnPayPayment);
+router.post("/stripe-checkout", protectedRoute, stripeCheckout);
+
+router.get("/checkout-session/:sessionId", protectedRoute, checkoutSession);
 
 export default router;

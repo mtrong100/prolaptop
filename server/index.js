@@ -15,8 +15,7 @@ app.use(
     origin: [
       process.env.LOCAL_CLIENT_URL,
       process.env.LOCAL_CLIENT_URL_2,
-      process.env.VNPAY_URL,
-      process.env.VNPAY_RETURN_URL,
+      process.env.STRIPE_URL,
     ],
     credentials: true,
   })

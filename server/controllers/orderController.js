@@ -2,17 +2,10 @@ import Order from "../models/orderModel.js";
 import Product from "../models/productModel.js";
 import { sendEmailCompletePurchase } from "../services/emailService.js";
 import dotenv from "dotenv";
-import crypto from "crypto";
-import dateFormat from "dateformat";
-import querystring from "qs";
-
 dotenv.config();
-
-const ORDER_QUERY = {
-  PAGE: 1,
-  LIMIT: 10,
-  ORDER: "desc",
-};
+const stripe = await import("stripe").then((module) =>
+  module.default(process.env.STRIPE_SECRET_KEY)
+);
 
 export const getOrderCollection = async (req, res) => {
   const { status } = req.query;
@@ -250,73 +243,100 @@ export const cancelOrder = async (req, res) => {
   }
 };
 
-export const vnPayPayment = async (req, res) => {
+export const stripeCheckout = async (req, res) => {
+  const { products, shippingMethod, couponCodeUsed } = req.body;
+
   try {
-    const ipAddr =
-      req.headers["x-forwarded-for"] ||
-      req.connection.remoteAddress ||
-      req.socket.remoteAddress ||
-      (req.connection.socket ? req.connection.socket.remoteAddress : null);
+    const lineItems = products.map((item) => {
+      return {
+        price_data: {
+          currency: "vnd",
+          product_data: {
+            name: item.name,
+            images: [item.image],
+            metadata: {
+              id: item.id,
+            },
+          },
+          unit_amount: item.price,
+        },
+        quantity: item.quantity,
+      };
+    });
 
-    const tmnCode = process.env.VNPAY_TMN_CODE;
-    const secretKey = process.env.VNPAY_HASH_SECRET;
-    const vnpUrl = process.env.VNPAY_URL;
-    const returnUrl = process.env.VNPAY_RETURN_URL;
-
-    const date = new Date();
-    const createDate = dateFormat(date, "yyyymmddHHmmss");
-    const orderId = dateFormat(date, "HHmmss");
-    const amount = req.body.amount;
-    const bankCode = req.body.bankCode;
-    const orderInfo = req.body.orderDescription;
-    const orderType = req.body.orderType;
-    let locale = req.body.language;
-
-    if (!locale) {
-      locale = "vn";
-    }
-    const currCode = "VND";
-    let vnp_Params = {
-      vnp_Version: "2.1.0",
-      vnp_Command: "pay",
-      vnp_TmnCode: tmnCode,
-      vnp_Locale: locale,
-      vnp_CurrCode: currCode,
-      vnp_TxnRef: orderId,
-      vnp_OrderInfo: orderInfo,
-      vnp_OrderType: orderType,
-      vnp_Amount: amount * 100,
-      vnp_ReturnUrl: returnUrl,
-      vnp_IpAddr: ipAddr,
-      vnp_CreateDate: createDate,
-    };
-
-    if (bankCode) {
-      vnp_Params["vnp_BankCode"] = bankCode;
+    let couponId;
+    if (couponCodeUsed && couponCodeUsed.name) {
+      try {
+        const existingCoupon = await stripe.coupons.retrieve(
+          couponCodeUsed.name
+        );
+        couponId = existingCoupon.id;
+      } catch (error) {
+        if (error.code === "resource_missing") {
+          const coupon = await stripe.coupons.create({
+            percent_off: couponCodeUsed.discount,
+            duration: "once",
+            id: couponCodeUsed.name,
+          });
+          couponId = coupon.id;
+        } else {
+          throw error;
+        }
+      }
     }
 
-    const sortObject = (obj) => {
-      const sorted = {};
-      const keys = Object.keys(obj).sort();
-      keys.forEach((key) => {
-        sorted[key] = obj[key];
-      });
-      return sorted;
-    };
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      mode: "payment",
+      success_url: `${process.env.LOCAL_CLIENT_URL}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.LOCAL_CLIENT_URL}/checkout`,
+      line_items: lineItems,
+      shipping_address_collection: {
+        allowed_countries: ["VN"],
+      },
+      discounts: couponId ? [{ coupon: couponId }] : [],
+      shipping_options: [
+        {
+          shipping_rate_data: {
+            type: "fixed_amount",
+            fixed_amount: {
+              amount: shippingMethod.price,
+              currency: "vnd",
+            },
+            display_name: shippingMethod.name,
+            delivery_estimate: {
+              minimum: { unit: "business_day", value: 5 },
+              maximum: { unit: "business_day", value: 7 },
+            },
+          },
+        },
+      ],
+      phone_number_collection: {
+        enabled: true,
+      },
+    });
 
-    vnp_Params = sortObject(vnp_Params);
-
-    const signData = querystring.stringify(vnp_Params, { encode: false });
-    const hmac = crypto.createHmac("sha512", secretKey);
-    const signed = hmac.update(Buffer.from(signData, "utf-8")).digest("hex");
-    vnp_Params["vnp_SecureHash"] = signed;
-
-    const paymentUrl =
-      vnpUrl + "?" + querystring.stringify(vnp_Params, { encode: false });
-
-    res.redirect(paymentUrl);
+    return res.json({ id: session.id });
   } catch (error) {
-    console.error("Error in vnPayPayment controller:", error.message);
-    res.status(500).json({ message: "Internal Server Error" });
+    console.log("Error in stripeCheckout controller", error.message);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const checkoutSession = async (req, res) => {
+  const { sessionId } = req.params;
+
+  try {
+    const [session, lineItems] = await Promise.all([
+      stripe.checkout.sessions.retrieve(sessionId, {
+        expand: ["payment_intent.payment_method"],
+      }),
+      stripe.checkout.sessions.listLineItems(sessionId),
+    ]);
+
+    return res.json({ session, lineItems });
+  } catch (error) {
+    console.error("Error fetching checkout session:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };

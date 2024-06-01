@@ -81,10 +81,22 @@ export const cancelOrderApi = async (id) => {
   return res.data;
 };
 
-export const vnPayPaymentApi = async (req) => {
+export const stripePaymentApi = async (req) => {
   const res = await axios.post(
-    `${import.meta.env.VITE_SERVER_URL}/api/order/create_payment_url`,
+    `${import.meta.env.VITE_SERVER_URL}/api/order/stripe-checkout`,
     req,
+    {
+      withCredentials: true,
+    }
+  );
+  return res.data;
+};
+
+export const getCheckoutSessionApi = async (session_id) => {
+  const res = await axios.get(
+    `${
+      import.meta.env.VITE_SERVER_URL
+    }/api/order/checkout-session/${session_id}`,
     {
       withCredentials: true,
     }

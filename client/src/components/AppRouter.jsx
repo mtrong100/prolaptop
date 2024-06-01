@@ -17,6 +17,7 @@ const About = lazy(() => import("../pages/About"));
 const Order = lazy(() => import("../pages/Order"));
 const Register = lazy(() => import("../pages/Register"));
 const Login = lazy(() => import("../pages/Login"));
+const PaymentSucess = lazy(() => import("../pages/PaymentSucess"));
 
 const mainRoutes = [
   { path: "/", element: <Home /> },
@@ -31,6 +32,7 @@ const mainRoutes = [
   { path: "/about", element: <About /> },
   { path: "/register", element: <Register /> },
   { path: "/login", element: <Login /> },
+  { path: "/payment-success", element: <PaymentSucess /> },
 ];
 
 const AppRouter = () => {

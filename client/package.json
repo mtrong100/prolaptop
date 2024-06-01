@@ -13,6 +13,8 @@
     "@hookform/resolvers": "^3.4.0",
     "@material-tailwind/react": "^2.1.9",
     "@reduxjs/toolkit": "^2.2.4",
+    "@stripe/react-stripe-js": "^2.7.1",
+    "@stripe/stripe-js": "^3.4.1",
     "@tailwindcss/line-clamp": "^0.4.4",
     "axios": "^1.6.8",
     "firebase": "^10.12.0",

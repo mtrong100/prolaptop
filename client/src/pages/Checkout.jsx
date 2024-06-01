@@ -12,11 +12,12 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import FieldInput from "../components/form/FieldInput";
-import { formatCurrencyVND, randomId } from "../utils/helper";
+import { formatCurrencyVND } from "../utils/helper";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
-import { createOrderApi, vnPayPaymentApi } from "../api/orderApi";
+import { createOrderApi, stripePaymentApi } from "../api/orderApi";
 import { toast } from "react-toastify";
 import { filterCart } from "../redux/slices/cartSlice";
+import { loadStripe } from "@stripe/stripe-js";
 
 const Checkout = () => {
   const {
@@ -110,19 +111,30 @@ const Checkout = () => {
     }
   };
 
-  const handleVNPayPayment = async () => {
+  const handleStripePayment = async () => {
     try {
-      const id = randomId();
+      const stripe = await loadStripe(
+        `${import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY}`
+      );
 
-      console.log("Calling vnPayPaymentApi...");
-      await vnPayPaymentApi({
-        amount: total,
-        orderId: id,
-        bankCode: "VNBANK",
-        language: "vn",
-      });
+      const body = {
+        products: orders,
+        totalCost: total,
+        shippingMethod: {
+          name: shippingMethod.name,
+          price: shippingMethod.price,
+        },
+        couponCodeUsed: {
+          name: couponCodeUsed.name,
+          discount: couponCodeUsed.discount,
+        },
+      };
+
+      const res = await stripePaymentApi(body);
+
+      stripe.redirectToCheckout({ sessionId: res.id });
     } catch (error) {
-      console.log("Error in handleVNPayPayment: ", error);
+      console.log("Lỗi thanh toán: ", error);
     }
   };
 
@@ -222,6 +234,7 @@ const Checkout = () => {
               variant="gradient"
               color="red"
               disabled={loading}
+              size="lg"
               className="flex rounded-sm w-full items-center gap-3 justify-center"
             >
               {loading ? (
@@ -235,11 +248,12 @@ const Checkout = () => {
             <Button
               type="button"
               variant="gradient"
-              color="blue"
+              color="indigo"
+              size="lg"
               className="flex rounded-sm w-full items-center gap-3 justify-center"
-              onClick={handleVNPayPayment}
+              onClick={handleStripePayment}
             >
-              Thanh toán với VN PAY
+              Thanh toán với STRIPE
             </Button>
           </div>
         </form>
