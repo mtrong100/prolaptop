@@ -9,6 +9,7 @@ import {
   cancelOrder,
   stripeCheckout,
   checkoutSession,
+  deleteOrder,
 } from "../controllers/orderController.js";
 import { protectedRoute } from "../middlewares/protectedRoute.js";
 
@@ -31,5 +32,7 @@ router.put("/cancel/:id", protectedRoute, cancelOrder);
 router.post("/stripe-checkout", protectedRoute, stripeCheckout);
 
 router.get("/checkout-session/:sessionId", protectedRoute, checkoutSession);
+
+router.delete("/delete/:id", protectedRoute, deleteOrder);
 
 export default router;

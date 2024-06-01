@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { getAllOrderApi } from "../api/orderApi";
+import { deleteOrderApi, getAllOrderApi } from "../api/orderApi";
 import { useSelector } from "react-redux";
 import useDebounce from "./useDebounce";
+import Swal from "sweetalert2";
 
-export default function useGetOrder() {
+export default function useManageOrder() {
   const [myorders, setMyorders] = useState([]);
   const [loading, setLoading] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
@@ -67,6 +68,31 @@ export default function useGetOrder() {
     }
   };
 
+  const handleDeleteOrder = async (orderId) => {
+    Swal.fire({
+      title: "Bạn có chắc chắn không?",
+      text: "Bạn sẽ không thể hoàn tác hành động này!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Có, xóa nó!",
+      cancelButtonText: "Hủy",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deleteOrderApi(orderId);
+          const res = await getAllOrderApi();
+          setMyorders(res?.docs);
+          Swal.fire("Đã xóa!", "Đơn hàng của bạn đã được xóa.", "success");
+        } catch (error) {
+          console.log("Xóa Đơn hàng thất bại ", error);
+          Swal.fire("Lỗi!", "Xóa Đơn hàng thất bại.", "error");
+        }
+      }
+    });
+  };
+
   return {
     loading,
     myorders,
@@ -78,5 +104,6 @@ export default function useGetOrder() {
     paginate,
     setStatus,
     status,
+    handleDeleteOrder,
   };
 }

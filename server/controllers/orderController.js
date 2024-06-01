@@ -340,3 +340,26 @@ export const checkoutSession = async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export const deleteOrder = async (req, res) => {
+  const { id } = req.params;
+  const userRole = req.user?.role;
+
+  try {
+    if (userRole !== "admin") {
+      return res
+        .status(403)
+        .json({ error: "You do not have permission to perform this action" });
+    }
+
+    const order = await Order.findById(id);
+    if (!order) {
+      return res.status(404).json({ message: "Không tìm thấy đơn hàng" });
+    }
+    await order.remove();
+    return res.status(200).json({ message: "Đơn hàng đã đã đã đã đã xoát" });
+  } catch (error) {
+    console.error("Error in deleteOrder controller:", error.message);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};

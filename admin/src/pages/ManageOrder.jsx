@@ -17,11 +17,12 @@ import {
   MdChevronLeft,
   MdChevronRight,
   MdOutlineFileDownload,
+  MdDelete,
 } from "react-icons/md";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { displayStatus, formatCurrencyVND, formatDate } from "../utils/helper";
-import useGetOrder from "../hooks/useGetOrder";
+import useManageOrder from "../hooks/useManageOrder";
 import { IoEye, IoSearchOutline } from "react-icons/io5";
 import { useState } from "react";
 import { ORDER_STATUS } from "../utils/constants";
@@ -40,7 +41,8 @@ const ManageOrder = () => {
     handleQueryOrder,
     setStatus,
     status,
-  } = useGetOrder();
+    handleDeleteOrder,
+  } = useManageOrder();
 
   return (
     <div>
@@ -90,7 +92,10 @@ const ManageOrder = () => {
             Không tìm thấy đơn hàng
           </p>
         ) : (
-          <TableWithStripedRows results={filterMyorders} />
+          <TableWithStripedRows
+            results={filterMyorders}
+            onDelete={handleDeleteOrder}
+          />
         )}
       </div>
 
@@ -113,7 +118,7 @@ const ManageOrder = () => {
 
 export default ManageOrder;
 
-const TableWithStripedRows = ({ results = [] }) => {
+const TableWithStripedRows = ({ results = [], onDelete }) => {
   return (
     <div className="h-full w-full">
       <table className="w-full text-left">
@@ -174,6 +179,13 @@ const TableWithStripedRows = ({ results = [] }) => {
               <td className="p-4 ">
                 <div className="flex items-center gap-2">
                   <DialogDefault order={item} />
+                  <IconButton
+                    onClick={() => onDelete(item?._id)}
+                    color="red"
+                    size="md"
+                  >
+                    <MdDelete size={20} color="white" />
+                  </IconButton>
                 </div>
               </td>
             </tr>

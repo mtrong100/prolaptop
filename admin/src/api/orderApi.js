@@ -93,3 +93,13 @@ export const getAllOrderApi = async ({
 
   return res.data;
 };
+
+export const deleteOrderApi = async (id) => {
+  const res = await axios.delete(
+    `${import.meta.env.VITE_SERVER_URL}/api/order/delete/${id}`,
+    {
+      withCredentials: true,
+    }
+  );
+  return res.data;
+};
