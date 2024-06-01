@@ -132,7 +132,11 @@ const Checkout = () => {
 
       const res = await stripePaymentApi(body);
 
-      stripe.redirectToCheckout({ sessionId: res.id });
+      if (res) {
+        window.location.href = res.url;
+      }
+
+      // stripe.redirectToCheckout({ sessionId: res.id });
     } catch (error) {
       console.log("Lỗi thanh toán: ", error);
     }

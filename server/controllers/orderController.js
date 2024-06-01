@@ -316,7 +316,7 @@ export const stripeCheckout = async (req, res) => {
       },
     });
 
-    return res.json({ id: session.id });
+    return res.json({ id: session.id, url: session.url });
   } catch (error) {
     console.log("Error in stripeCheckout controller", error.message);
     return res.status(500).json({ error: "Internal Server Error" });
