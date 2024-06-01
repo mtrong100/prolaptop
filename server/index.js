@@ -16,6 +16,7 @@ app.use(
       process.env.LOCAL_CLIENT_URL,
       process.env.LOCAL_CLIENT_URL_2,
       process.env.STRIPE_URL,
+      "https://js.stripe.com",
     ],
     credentials: true,
   })
