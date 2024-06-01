@@ -177,7 +177,7 @@ const TableWithStripedRows = ({ results = [], onDelete }) => {
                 ></Chip>
               </td>
               <td className="p-4 ">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   <DialogDefault order={item} />
                   <IconButton
                     onClick={() => onDelete(item?._id)}
