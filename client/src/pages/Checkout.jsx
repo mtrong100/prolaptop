@@ -112,30 +112,31 @@ const Checkout = () => {
   };
 
   const handleStripePayment = async () => {
+    // const stripe = await loadStripe(
+    //   `${import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY}`
+    // );
+
+    const body = {
+      products: orders,
+      totalCost: total,
+      shippingMethod: {
+        name: shippingMethod.name,
+        price: shippingMethod.price,
+      },
+      couponCodeUsed: {
+        name: couponCodeUsed.name,
+        discount: couponCodeUsed.discount,
+      },
+    };
+
     try {
-      const stripe = await loadStripe(
-        `${import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY}`
-      );
-
-      const body = {
-        products: orders,
-        totalCost: total,
-        shippingMethod: {
-          name: shippingMethod.name,
-          price: shippingMethod.price,
-        },
-        couponCodeUsed: {
-          name: couponCodeUsed.name,
-          discount: couponCodeUsed.discount,
-        },
-      };
-
       const res = await stripePaymentApi(body);
 
-      if (res) {
+      if (res && res.url) {
         window.location.href = res.url;
+      } else {
+        console.error("No URL returned from payment API");
       }
-
       // stripe.redirectToCheckout({ sessionId: res.id });
     } catch (error) {
       console.log("Lỗi thanh toán: ", error);
