@@ -21,6 +21,7 @@ import "jspdf-autotable";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import { ORDER_STATUS } from "../utils/constants";
 import { IoSearchOutline } from "react-icons/io5";
+import { font } from "../assets/font";
 
 const Order = () => {
   const {
@@ -192,17 +193,21 @@ const TableWithStripedRows = ({ results = [], onCancel }) => {
 
 export function DialogDefault({ order }) {
   const [open, setOpen] = React.useState(false);
-
   const handleOpen = () => setOpen(!open);
 
   const exportToPDF = () => {
     // Create a new PDF document
     const doc = new jsPDF();
 
+    // Add the custom font
+    doc.addFileToVFS("Roboto-Regular.ttf", font);
+    doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
+    doc.setFont("Roboto");
+
     // Add title "Billing Details" centered
     doc.setFontSize(20);
     doc.setTextColor("#333333");
-    doc.text("Hóa đơn đặt hàng", doc.internal.pageSize.getWidth() / 2, 20, {
+    doc.text("Hóa đơn mua hàng", doc.internal.pageSize.getWidth() / 2, 20, {
       align: "center",
     });
 
@@ -217,7 +222,7 @@ export function DialogDefault({ order }) {
     // Additional information
     if (order?.couponCodeUsed) {
       doc.text(
-        `Mã giảm giá: ${order?.couponCodeUsed?.name} - ${order?.couponCodeUsed?.discount}`,
+        `Mã giảm giá: ${order?.couponCodeUsed?.name} - ${order?.couponCodeUsed?.discount}%`,
         20,
         80
       );
@@ -248,7 +253,7 @@ export function DialogDefault({ order }) {
       body: tableData,
       theme: "grid",
       styles: {
-        font: "Arial",
+        font: "Roboto",
         fontSize: 10,
         textColor: "#333333",
         lineWidth: 0.5,

@@ -187,7 +187,7 @@ const Cart = () => {
                 onChange={handleCouponChange}
               >
                 <option value="" className="uppercase font-semibold">
-                  Select a coupon
+                  Chọn mã giảm giá
                 </option>
                 {couponCodes?.map((item) => (
                   <option

@@ -83,7 +83,7 @@ const Product = () => {
             <input
               type="text"
               className="outline-none border-none w-full bg-transparent "
-              placeholder="Search products..."
+              placeholder="Tìm kiếm sản phẩm..."
               value={filter.query}
               onChange={(e) => setFilter({ ...filter, query: e.target.value })}
             />
@@ -133,7 +133,7 @@ function Sidebar({
   setPriceFilter,
 }) {
   return (
-    <aside className=" w-[300px] top-[190px] sticky max-h-[700px] h-full overflow-y-auto  bg-gray-50 p-5 rounded-sm border border-gray-300">
+    <aside className=" w-[300px]  border-r pr-3 border-gray-300">
       <div className="flex items-center justify-between mb-3">
         <h1 className="font-semibold  text-lg">Bộ lọc</h1>
         <Button

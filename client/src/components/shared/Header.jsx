@@ -91,7 +91,7 @@ const Header = () => {
                 <input
                   type="text"
                   className="outline-none border-none w-full bg-transparent "
-                  placeholder="Search products..."
+                  placeholder="Tiếm kiếm sản phẩm..."
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                 />

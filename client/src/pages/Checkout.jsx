@@ -17,7 +17,8 @@ import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { createOrderApi, stripePaymentApi } from "../api/orderApi";
 import { toast } from "react-toastify";
 import { filterCart } from "../redux/slices/cartSlice";
-import { loadStripe } from "@stripe/stripe-js";
+import { FaStripe } from "react-icons/fa";
+import { BsStripe } from "react-icons/bs";
 
 const Checkout = () => {
   const {
@@ -122,10 +123,6 @@ const Checkout = () => {
       return;
     }
 
-    // const stripe = await loadStripe(
-    //   `${import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY}`
-    // );
-
     const body = {
       products: orders,
       totalCost: total,
@@ -147,7 +144,6 @@ const Checkout = () => {
       } else {
         console.error("No URL returned from payment API");
       }
-      // stripe.redirectToCheckout({ sessionId: res.id });
     } catch (error) {
       console.log("Lỗi thanh toán: ", error);
     }
@@ -255,7 +251,7 @@ const Checkout = () => {
               {loading ? (
                 <Spinner color="red" className="h-4 w-4" />
               ) : (
-                <IoMdCheckmarkCircleOutline size={20} />
+                <IoMdCheckmarkCircleOutline size={25} />
               )}
               {loading ? "Đang chờ..." : "Đặt hàng"}
             </Button>
@@ -268,6 +264,7 @@ const Checkout = () => {
               className="flex rounded-sm w-full items-center gap-3 justify-center"
               onClick={handleStripePayment}
             >
+              <BsStripe size={25} />
               Thanh toán với STRIPE
             </Button>
           </div>

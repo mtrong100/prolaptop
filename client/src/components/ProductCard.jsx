@@ -46,7 +46,7 @@ const ProductCard = ({ p }) => {
   const isInWishlist = userWishlist.find((item) => item?._id === p?._id);
 
   return (
-    <div className="group relative  border-2 rounded-sm">
+    <div className="group relative  border rounded-sm hover:shadow-md">
       <div className="relative overflow-hidden">
         <div onClick={handleViewProduct} className="group">
           <img
@@ -90,7 +90,6 @@ const ProductCard = ({ p }) => {
         <div className="flex items-center justify-between">
           <Chip
             size="sm"
-            color="red"
             variant="ghost"
             value={p?.category}
             className="w-fit"
@@ -120,7 +119,7 @@ const ProductCard = ({ p }) => {
             {displayRating(p?.rating)}
           </div>
           <span className="capitalize text-gray text-opacity-60">
-            {`${p?.reviews?.length || 0} Reviews`}
+            {`${p?.reviews?.length || 0} Đánh giá`}
           </span>
         </div>
       </div>
