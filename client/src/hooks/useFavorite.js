@@ -14,6 +14,11 @@ export default function useFavorite() {
   );
 
   const handleToggleFavorite = async (productId) => {
+    if (!currentUser) {
+      toast.error("Vui lòng đăng nhập");
+      return;
+    }
+
     try {
       const res = await toggleWishlistApi(currentUser?._id, productId);
       const data = await getUserWishlistApi(currentUser?._id);

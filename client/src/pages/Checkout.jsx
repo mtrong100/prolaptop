@@ -78,6 +78,11 @@ const Checkout = () => {
   }, [subTotal, shippingMethod, couponCodeUsed]);
 
   const handleCheckout = async (values) => {
+    if (!currentUser) {
+      toast.error("Vui lòng đăng nhập");
+      return;
+    }
+
     setLoading(true);
 
     const req = {
@@ -112,6 +117,11 @@ const Checkout = () => {
   };
 
   const handleStripePayment = async () => {
+    if (!currentUser) {
+      toast.error("Vui lòng đăng nhập");
+      return;
+    }
+
     // const stripe = await loadStripe(
     //   `${import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY}`
     // );

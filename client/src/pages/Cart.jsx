@@ -28,6 +28,7 @@ const Cart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { couponCodes } = useGetCouponCodes();
+  const { currentUser } = useSelector((state) => state.user);
   const { shippingMethod, cart, couponCodeUsed } = useSelector(
     (state) => state.cart
   );
@@ -66,6 +67,11 @@ const Cart = () => {
   };
 
   const handleNavigateCheckoutPage = () => {
+    if (!currentUser) {
+      toast.error("Vui lòng đăng nhập");
+      return;
+    }
+
     // chech if product has been selected in cart or not
     const hasSlectedProduct = cart.filter((item) => item.selected);
 

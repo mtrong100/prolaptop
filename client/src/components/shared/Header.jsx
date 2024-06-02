@@ -179,11 +179,11 @@ const Header = () => {
             {NAV_LINKS.map((item) => {
               const isActive = item.link === location.pathname;
 
-              if (item.name === "My Account" && !currentUser) {
+              if (item.link === "/account" && !currentUser) {
                 return null;
               }
 
-              if (item.name === "Wishlist" && !currentUser) {
+              if (item.link === "/wishlist" && !currentUser) {
                 return null;
               }
 
