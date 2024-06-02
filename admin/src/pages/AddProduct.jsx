@@ -7,9 +7,9 @@ import { Select, Option, Button } from "@material-tailwind/react";
 import JoditEditor from "jodit-react";
 import FieldInput from "../components/FieldInput";
 import FieldTexarea from "../components/FieldTexarea";
-import useGetCategories from "../hooks/useGetCategories";
 import {
   LAPTOP_BRANDS,
+  LAPTOP_CATEGORIES,
   LAPTOP_COLORS,
   LAPTOP_CPUS,
   LAPTOP_GRAPHIC_CARDS,
@@ -41,9 +41,6 @@ const AddProduct = () => {
   });
 
   const editor = useRef(null);
-  const { categories } = useGetCategories();
-
-  console.log(categories);
 
   const {
     handleUploadImages,
@@ -120,9 +117,9 @@ const AddProduct = () => {
               label="Danh mục"
               onChange={(val) => setForm({ ...form, category: val })}
             >
-              {categories.map((item) => (
-                <Option key={item?._id} value={item?.name}>
-                  {item?.name}
+              {LAPTOP_CATEGORIES.map((item) => (
+                <Option key={item} value={item}>
+                  {item}
                 </Option>
               ))}
             </Select>

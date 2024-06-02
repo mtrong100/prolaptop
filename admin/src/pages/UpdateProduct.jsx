@@ -7,9 +7,9 @@ import { Select, Option, Button } from "@material-tailwind/react";
 import JoditEditor from "jodit-react";
 import FieldInput from "../components/FieldInput";
 import FieldTexarea from "../components/FieldTexarea";
-import useGetCategories from "../hooks/useGetCategories";
 import {
   LAPTOP_BRANDS,
+  LAPTOP_CATEGORIES,
   LAPTOP_COLORS,
   LAPTOP_CPUS,
   LAPTOP_GRAPHIC_CARDS,
@@ -45,7 +45,6 @@ const UpdateProduct = () => {
   });
 
   const editor = useRef(null);
-  const { categories } = useGetCategories();
   const { product } = useGetProductDetail(productId);
 
   const {
@@ -147,21 +146,19 @@ const UpdateProduct = () => {
 
           <div>
             <h1 className="mb-2 font-semibold">Danh mục</h1>
-            {form.category && (
-              <Select
-                className="capitalize"
-                size="lg"
-                label="Danh mục"
-                value={form.category}
-                onChange={(val) => setForm({ ...form, category: val })}
-              >
-                {categories.map((item) => (
-                  <Option key={item?._id} value={item?.name}>
-                    {item?.name}
-                  </Option>
-                ))}
-              </Select>
-            )}
+            <Select
+              className="capitalize"
+              size="lg"
+              label="Danh mục"
+              value={form.category}
+              onChange={(val) => setForm({ ...form, category: val })}
+            >
+              {LAPTOP_CATEGORIES.map((item) => (
+                <Option key={item} value={item}>
+                  {item}
+                </Option>
+              ))}
+            </Select>
           </div>
 
           <div>

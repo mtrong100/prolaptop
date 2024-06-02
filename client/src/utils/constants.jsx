@@ -81,11 +81,6 @@ export const LAPTOP_HARD_DRIVES = [
   "SSD 128GB",
 ];
 
-export const PAYMENT_METHOD = {
-  CASH: "Cash on delivery",
-  CARD: "Pay with card",
-};
-
 export const SORT_BRANDS = ["All", "Dell", "HP", "Asus", "Acer"];
 
 export const SORT_STATUS = [
@@ -164,4 +159,13 @@ export const ORDER_STATUS = [
   "Đang vận chuyển",
   "Đã giao hàng",
   "Đã hủy",
+];
+
+export const LAPTOP_CATEGORIES = [
+  "Laptop chơi game",
+  "Laptop văn phòng",
+  "laptop đồ họa",
+  "Laptop học tập",
+  "Laptop doanh nhân",
+  "Laptop mỏng nhẹ",
 ];

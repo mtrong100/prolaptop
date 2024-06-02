@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import {
   LAPTOP_BRANDS,
+  LAPTOP_CATEGORIES,
   LAPTOP_CPUS,
   LAPTOP_GRAPHIC_CARDS,
   LAPTOP_HARD_DRIVES,
@@ -10,7 +11,6 @@ import {
   SORT_STATUS,
 } from "../utils/constants";
 import { Button, IconButton, Radio } from "@material-tailwind/react";
-import useGetCategories from "../hooks/useGetCategories";
 import { GoSearch } from "react-icons/go";
 import useMegaFilterProduct from "../../../admin/src/hooks/useMegaFilterProduct";
 import ProductCard, { ProductCardSkeleton } from "../components/ProductCard";
@@ -132,8 +132,6 @@ function Sidebar({
   priceFilter,
   setPriceFilter,
 }) {
-  const { categories } = useGetCategories();
-
   return (
     <aside className=" w-[300px] top-[190px] sticky max-h-[600px] h-full overflow-y-auto  bg-gray-50 p-5 rounded-sm border border-gray-300">
       <div className="flex items-center justify-between mb-3">
@@ -193,18 +191,16 @@ function Sidebar({
         </div>
 
         <div>
-          <h1 className="font-semibold mb-2 text-lg">Danh mục</h1>
+          <h1 className="font-semibold mb-2 text-lg">Nhu cầu sử dụng</h1>
           <ul>
-            {categories.map((item) => (
-              <li key={item?.name}>
+            {LAPTOP_CATEGORIES.map((item) => (
+              <li key={item}>
                 <Radio
                   color="red"
                   name="category"
-                  label={item?.name}
-                  value={item?.name}
-                  onChange={() =>
-                    setFilter({ ...filter, category: item?.name })
-                  }
+                  label={item}
+                  value={item}
+                  onChange={() => setFilter({ ...filter, category: item })}
                 />
               </li>
             ))}

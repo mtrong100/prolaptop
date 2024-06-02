@@ -78,17 +78,17 @@ export const SIDEBAR_LINKS = [
       },
     ],
   },
-  {
-    title: "Danh mục",
-    icon: <MdOutlineCategory size={20} />,
-    items: [
-      {
-        text: "Quản lí",
-        navigateTo: "/admin/manage-category",
-        prefixIcon: <MdManageSearch size={25} />,
-      },
-    ],
-  },
+  // {
+  //   title: "Danh mục",
+  //   icon: <MdOutlineCategory size={20} />,
+  //   items: [
+  //     {
+  //       text: "Quản lí",
+  //       navigateTo: "/admin/manage-category",
+  //       prefixIcon: <MdManageSearch size={25} />,
+  //     },
+  //   ],
+  // },
   {
     title: "Mã giảm giá",
     icon: <RiCoupon3Line size={20} />,
@@ -141,4 +141,13 @@ export const ORDER_STATUS = [
   "Đang vận chuyển",
   "Đã giao hàng",
   "Đã hủy",
+];
+
+export const LAPTOP_CATEGORIES = [
+  "Laptop chơi game",
+  "Laptop văn phòng",
+  "laptop đồ họa",
+  "Laptop học tập",
+  "Laptop doanh nhân",
+  "Laptop mỏng nhẹ",
 ];
