@@ -209,24 +209,22 @@ export function DialogDefault({ order }) {
     // Add content to the PDF document
     doc.setFontSize(12);
     doc.setTextColor("#666666");
-    doc.text(`Order ID: #${order?._id}`, 20, 40);
+    doc.text(`Mã đơn hàng: #${order?._id}`, 20, 40);
     doc.text(`Người mua: ${order?.shippingAddress?.fullName}`, 20, 50);
     doc.text(`Ngày: ${formatDate(order?.createdAt)}`, 20, 60);
-    doc.text(`Phương thức thanh toán: ${order?.paymentMethod}`, 20, 60);
+    doc.text(`Phương thức thanh toán: ${order?.paymentMethod}`, 20, 70);
 
     // Additional information
     if (order?.couponCodeUsed) {
       doc.text(
-        `Mã giảm giá: ${
-          order?.couponCodeUsed?.name - order?.couponCodeUsed?.discount
-        }`,
+        `Mã giảm giá: ${order?.couponCodeUsed?.name} - ${order?.couponCodeUsed?.discount}`,
         20,
         80
       );
     }
     if (order?.shippingMethod) {
       doc.text(
-        `Phí giao hàng: ${order?.shippingMethod?.name} - Cost ${order?.shippingMethod?.price}$`,
+        `Phí giao hàng: ${order?.shippingMethod?.name} - Giá ${order?.shippingMethod?.price}$`,
         20,
         90
       );
@@ -240,9 +238,9 @@ export function DialogDefault({ order }) {
     const orderItems = order?.orderItems || [];
     const tableData = orderItems.map((item) => [
       item.name,
-      `$${item.price}`,
+      `${formatCurrencyVND(item.price)}`,
       `x${item.quantity}`,
-      `$${formatCurrencyVND(item.quantity * item.price)}`,
+      `${formatCurrencyVND(item.quantity * item.price)}`,
     ]);
     doc.autoTable({
       startY: 120,
@@ -269,7 +267,7 @@ export function DialogDefault({ order }) {
     doc.setFontSize(10);
     doc.setTextColor("#999999");
     doc.text(
-      `Generated on: ${currentDate}`,
+      `Tạo ngày: ${currentDate}`,
       doc.internal.pageSize.getWidth() - 70,
       doc.internal.pageSize.getHeight() - 10
     );
