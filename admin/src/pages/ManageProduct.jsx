@@ -6,6 +6,8 @@ import {
   IconButton,
   Switch,
   Chip,
+  Select,
+  Option,
 } from "@material-tailwind/react";
 import { IoSearchOutline, IoEye } from "react-icons/io5";
 import useManageProduct from "../hooks/useManageProduct";
@@ -17,6 +19,7 @@ import {
 } from "react-icons/md";
 import { formatCurrencyVND, formatDate } from "../utils/helper";
 import { useNavigate } from "react-router-dom";
+import { LAPTOP_CATEGORIES } from "../utils/constants";
 
 const TABLE_HEAD = [
   "Sản phẩm",
@@ -39,13 +42,31 @@ const ManageProduct = () => {
     handleNextPage,
     handlePrevPage,
     paginate,
+    setCategory,
+    category,
   } = useManageProduct();
 
   return (
     <div>
       <TitleSection>Quản lí sản phẩm</TitleSection>
 
-      <div className="mt-5  flex items-center justify-end">
+      <div className="mt-5  flex items-center justify-between">
+        <div className="w-72">
+          <Select
+            size="lg"
+            label="Danh mục"
+            color="red"
+            value={category}
+            onChange={(val) => setCategory(val)}
+          >
+            {LAPTOP_CATEGORIES.map((item) => (
+              <Option key={item} value={item}>
+                {item}
+              </Option>
+            ))}
+          </Select>
+        </div>
+
         <div className="flex items-center gap-1 w-full max-w-xs">
           <Input
             size="lg"

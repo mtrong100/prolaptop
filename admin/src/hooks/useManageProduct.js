@@ -12,6 +12,7 @@ export default function useManageProduct() {
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState("");
   const searchQuery = useDebounce(query, 300);
+  const [category, setCategory] = useState("");
   const [paginate, setPaginate] = useState({
     totalPages: 1,
     currentPage: 1,
@@ -26,6 +27,7 @@ export default function useManageProduct() {
         const res = await getAllProductsApi({
           page: paginate.currentPage,
           query: searchQuery,
+          category: category,
         });
 
         setPaginate((prev) => ({
@@ -43,7 +45,7 @@ export default function useManageProduct() {
     }
 
     fetchProducts();
-  }, [searchQuery, paginate.currentPage]);
+  }, [searchQuery, paginate.currentPage, category]);
 
   const handleSwitchFlashSale = async (productId) => {
     try {
@@ -114,5 +116,7 @@ export default function useManageProduct() {
     handleNextPage,
     handlePrevPage,
     paginate,
+    setCategory,
+    category,
   };
 }

@@ -21,6 +21,7 @@ const ProductDetail = () => {
   const [selectedImage, setSelectedImage] = useState("");
   const [quantity, setQuantity] = useState(1);
   const { product } = useGetProductDetail(productId);
+  console.log("🚀 ~ ProductDetail ~ product:", product);
   const { relatedProducts, isLoading } = useGetRelatedProducts(product?.brand);
   const { handleToggleFavorite, userWishlist } = useFavorite();
 
