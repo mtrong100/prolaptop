@@ -19,7 +19,8 @@ import {
 } from "react-icons/md";
 import { formatCurrencyVND, formatDate } from "../utils/helper";
 import { useNavigate } from "react-router-dom";
-import { LAPTOP_CATEGORIES } from "../utils/constants";
+import useGetCategories from "../hooks/useGetCategories";
+import useGetBrands from "../hooks/useGetBrands";
 
 const TABLE_HEAD = [
   "Sản phẩm",
@@ -27,7 +28,7 @@ const TABLE_HEAD = [
   "Danh mục",
   "Giá sau giảm",
   "Tồn kho",
-  "Flash sale",
+  "FlashSale",
   "Ngày thêm",
   "Thao tác",
 ];
@@ -35,36 +36,54 @@ const TABLE_HEAD = [
 const ManageProduct = () => {
   const {
     products,
-    query,
     handleSwitchFlashSale,
     handleQuery,
     handleDeleteProduct,
     handleNextPage,
     handlePrevPage,
     paginate,
-    setCategory,
-    category,
+    setFilter,
+    filter,
   } = useManageProduct();
+
+  const { categories } = useGetCategories();
+  const { brands } = useGetBrands();
 
   return (
     <div>
       <TitleSection>Quản lí sản phẩm</TitleSection>
 
       <div className="mt-5  flex items-center justify-between">
-        <div className="w-72">
-          <Select
-            size="lg"
-            label="Danh mục"
-            color="red"
-            value={category}
-            onChange={(val) => setCategory(val)}
-          >
-            {LAPTOP_CATEGORIES.map((item) => (
-              <Option key={item} value={item}>
-                {item}
-              </Option>
-            ))}
-          </Select>
+        <div className="flex items-center gap-5">
+          <div className="w-72">
+            <Select
+              size="lg"
+              label="Danh mục"
+              color="red"
+              onChange={(val) => setFilter({ ...filter, category: val })}
+            >
+              {categories?.map((item) => (
+                <Option key={item?._id} value={item?.name}>
+                  {item?.name}
+                </Option>
+              ))}
+            </Select>
+          </div>
+
+          <div className="w-72">
+            <Select
+              size="lg"
+              label="Thương hiệu"
+              color="red"
+              onChange={(val) => setFilter({ ...filter, brand: val })}
+            >
+              {brands?.map((item) => (
+                <Option key={item?._id} value={item?.name}>
+                  {item?.name}
+                </Option>
+              ))}
+            </Select>
+          </div>
         </div>
 
         <div className="flex items-center gap-1 w-full max-w-xs">
@@ -72,7 +91,7 @@ const ManageProduct = () => {
             size="lg"
             color="blue"
             label="Tìm kiếm"
-            value={query}
+            value={filter.query || ""}
             onChange={handleQuery}
             className="w-full"
           />
@@ -141,14 +160,14 @@ export function TableWithStripedRows({ products = [], onSwitch, onDelete }) {
                     <img
                       src={item?.thumbnail}
                       alt={item?.name}
-                      className="object-contain w-[60px] h-[60px] flex-shrink-0"
+                      className="object-cover w-[60px] h-[60px] aspect-square flex-shrink-0"
                     />
                     <h1 className="line-clamp-3 flex-1">{item?.name}</h1>
                   </div>
                 </td>
                 <td className="p-4">
                   <Chip
-                    value={item?.brand}
+                    value={item?.brand?.name || ""}
                     size="sm"
                     variant="ghost"
                     color="blue"
@@ -156,13 +175,12 @@ export function TableWithStripedRows({ products = [], onSwitch, onDelete }) {
                   />
                 </td>
                 <td className="p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {item?.category}
-                  </Typography>
+                  <Chip
+                    value={item?.category?.name || ""}
+                    size="sm"
+                    variant="ghost"
+                    className="w-fit"
+                  />
                 </td>
                 <td className="p-4">
                   <Typography variant="small" color="red" className="font-bold">

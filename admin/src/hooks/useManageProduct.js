@@ -10,14 +10,18 @@ import Swal from "sweetalert2";
 export default function useManageProduct() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [query, setQuery] = useState("");
-  const searchQuery = useDebounce(query, 300);
-  const [category, setCategory] = useState("");
   const [paginate, setPaginate] = useState({
     totalPages: 1,
     currentPage: 1,
     totalDocs: 0,
   });
+  const [filter, setFilter] = useState({
+    category: "",
+    brand: "",
+    query: "",
+  });
+
+  const searchQuery = useDebounce(filter.query, 300);
 
   useEffect(() => {
     async function fetchProducts() {
@@ -27,7 +31,8 @@ export default function useManageProduct() {
         const res = await getAllProductsApi({
           page: paginate.currentPage,
           query: searchQuery,
-          category: category,
+          category: filter.category,
+          brand: filter.brand,
         });
 
         setPaginate((prev) => ({
@@ -45,7 +50,7 @@ export default function useManageProduct() {
     }
 
     fetchProducts();
-  }, [searchQuery, paginate.currentPage, category]);
+  }, [searchQuery, paginate.currentPage, filter.category, filter.brand]);
 
   const handleSwitchFlashSale = async (productId) => {
     try {
@@ -83,7 +88,10 @@ export default function useManageProduct() {
   };
 
   const handleQuery = (e) => {
-    setQuery(e.target.value);
+    setFilter((prev) => ({
+      ...prev,
+      query: e.target.value,
+    }));
   };
 
   const handleNextPage = () => {
@@ -107,8 +115,6 @@ export default function useManageProduct() {
   return {
     products,
     loading,
-    query,
-    setQuery,
     setProducts,
     handleSwitchFlashSale,
     handleQuery,
@@ -116,7 +122,7 @@ export default function useManageProduct() {
     handleNextPage,
     handlePrevPage,
     paginate,
-    setCategory,
-    category,
+    setFilter,
+    filter,
   };
 }

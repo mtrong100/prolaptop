@@ -135,7 +135,7 @@ function Sidebar({
   return (
     <aside className=" w-[300px]  border-r pr-3 border-gray-300">
       <div className="flex items-center justify-between mb-3">
-        <h1 className="font-semibold  text-lg">Bộ lọc</h1>
+        <h1 className="font-semibold  text-xl">Bộ lọc</h1>
         <Button
           onClick={onResetFilter}
           size="sm"

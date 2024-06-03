@@ -8,8 +8,6 @@ import JoditEditor from "jodit-react";
 import FieldInput from "../components/FieldInput";
 import FieldTexarea from "../components/FieldTexarea";
 import {
-  LAPTOP_BRANDS,
-  LAPTOP_CATEGORIES,
   LAPTOP_COLORS,
   LAPTOP_CPUS,
   LAPTOP_GRAPHIC_CARDS,
@@ -22,6 +20,8 @@ import { displayRating } from "../utils/helper";
 import useCreateProduct from "../hooks/useCreateProduct";
 import UploadProductThumbnail from "../components/UploadProductThumbnail";
 import UploadProductImages from "../components/UploadProductImages";
+import useGetCategories from "../hooks/useGetCategories";
+import useGetBrands from "../hooks/useGetBrands";
 
 const AddProduct = () => {
   const {
@@ -41,6 +41,8 @@ const AddProduct = () => {
   });
 
   const editor = useRef(null);
+  const { categories } = useGetCategories();
+  const { brands } = useGetBrands();
 
   const {
     handleUploadImages,
@@ -117,9 +119,9 @@ const AddProduct = () => {
               label="Danh mục"
               onChange={(val) => setForm({ ...form, category: val })}
             >
-              {LAPTOP_CATEGORIES.map((item) => (
-                <Option key={item} value={item}>
-                  {item}
+              {categories?.map((item) => (
+                <Option key={item?.name} value={item?._id}>
+                  {item?.name}
                 </Option>
               ))}
             </Select>
@@ -133,9 +135,9 @@ const AddProduct = () => {
               label="Thương hiệu"
               onChange={(val) => setForm({ ...form, brand: val })}
             >
-              {LAPTOP_BRANDS.map((item) => (
-                <Option key={item} value={item}>
-                  {item}
+              {brands?.map((item) => (
+                <Option key={item?.name} value={item?._id}>
+                  {item?.name}
                 </Option>
               ))}
             </Select>
@@ -296,7 +298,8 @@ const AddProduct = () => {
 
           <Button
             disabled={loading}
-            color="blue"
+            color="red"
+            variant="gradient"
             className="w-full"
             size="lg"
             type="submit"

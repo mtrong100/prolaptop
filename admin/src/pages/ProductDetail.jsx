@@ -14,11 +14,11 @@ const ProductDetail = () => {
     <div>
       <TitleSection>Chi tiết sản phẩm</TitleSection>
 
-      <div className="w-full max-w-6xl mt-5 mx-auto p-5 bg-gray-50 border border-blue-gray-200 rounded-sm">
+      <div className="w-full max-w-6xl mt-5 mx-auto p-5 bg-gray-50 border border-gray-200 rounded-sm">
         <section className="grid grid-cols-2 gap-10 text-lg">
           {/* Product infomation */}
           <div>
-            <h1 className="font-bold mb-3 text-2xl text-blue-600">
+            <h1 className="font-bold mb-3 text-2xl text-red-600">
               Thông tin cơ bản
             </h1>
             <div className="space-y-2">
@@ -33,12 +33,23 @@ const ProductDetail = () => {
               <div className="space-x-2">
                 <span className="font-semibold">Thương hiệu:</span>
                 <span>
-                  <Chip value={product?.brand} className="w-fit inline-block" />
+                  <Chip
+                    color="red"
+                    variant="ghost"
+                    value={product?.brand?.name}
+                    className="w-fit inline-block"
+                  />
                 </span>
               </div>
               <div className="space-x-2">
                 <span className="font-semibold">Danh mục:</span>
-                <span>{product?.category}</span>
+                <span>
+                  <Chip
+                    variant="ghost"
+                    value={product?.category?.name}
+                    className="w-fit inline-block"
+                  />
+                </span>
               </div>
               <div className="space-x-2">
                 <span className="font-semibold">Màu sắc:</span>
@@ -68,7 +79,7 @@ const ProductDetail = () => {
 
             <div className="w-full h-[1px] bg-gray-300 my-5"></div>
 
-            <h1 className="font-bold mb-3 text-2xl text-blue-600">
+            <h1 className="font-bold mb-3 text-2xl text-red-600">
               Thông số kỹ thuật
             </h1>
             <div className="space-y-2">
@@ -98,7 +109,7 @@ const ProductDetail = () => {
           {/* Product images */}
           <div className="space-y-5">
             <div className="space-y-2">
-              <h1 className="font-bold mb-3 text-2xl text-blue-600">
+              <h1 className="font-bold mb-3 text-2xl text-red-600">
                 Ảnh thumbnail
               </h1>
               <img
@@ -109,7 +120,7 @@ const ProductDetail = () => {
             </div>
 
             <div>
-              <h1 className="font-bold mb-3 text-2xl text-blue-600">
+              <h1 className="font-bold mb-3 text-2xl text-red-600">
                 Ảnh chi tiết
               </h1>
               <Carousel
@@ -134,7 +145,7 @@ const ProductDetail = () => {
                     color="white"
                     size="lg"
                     onClick={handlePrev}
-                    className="!absolute top-2/4 left-4 -translate-y-2/4 bg-blue-50 hover:bg-blue-100 text-blue-600"
+                    className="!absolute top-2/4 left-4 -translate-y-2/4 bg-red-50 hover:bg-red-100 text-red-600"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -159,7 +170,7 @@ const ProductDetail = () => {
                     color="white"
                     size="lg"
                     onClick={handleNext}
-                    className="!absolute top-2/4 !right-4 -translate-y-2/4 bg-blue-50 hover:bg-blue-100 text-blue-600"
+                    className="!absolute top-2/4 !right-4 -translate-y-2/4 bg-red-50 hover:bg-red-100 text-red-600"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -195,14 +206,14 @@ const ProductDetail = () => {
         {/* About */}
         <div className="mt-5 space-y-5">
           <div>
-            <h1 className="font-bold mb-2 text-2xl text-blue-600">
+            <h1 className="font-bold mb-2 text-2xl text-red-600">
               Mô tả sản phẩm
             </h1>
             <p>{product?.description}</p>
           </div>
 
           <div>
-            <h1 className="font-bold mb-2 text-2xl text-blue-600">
+            <h1 className="font-bold mb-2 text-2xl text-red-600">
               Thông tin chi tiết
             </h1>
             <div className="flex items-center justify-center flex-col">

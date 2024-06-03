@@ -9,6 +9,7 @@ import messageRouter from "./messageRouter.js";
 import conversationRouter from "./conversationRouter.js";
 import categoryRouter from "./categoryRouter.js";
 import couponCodeRouter from "./couponCodeRouter.js";
+import brandRouter from "./brandRouter.js";
 
 const router = express.Router();
 
@@ -22,5 +23,6 @@ router.use("/message", messageRouter);
 router.use("/conversation", conversationRouter);
 router.use("/category", categoryRouter);
 router.use("/couponcode", couponCodeRouter);
+router.use("/brand", brandRouter);
 
 export default router;

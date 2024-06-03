@@ -1,3 +1,5 @@
+import Brand from "../models/brandModel.js";
+import Category from "../models/categoryModel.js";
 import Product from "../models/productModel.js";
 
 const PRODUCT_QUERY = {
@@ -52,9 +54,7 @@ export const getProducts = async (req, res) => {
     const filter = {};
 
     if (query) filter.name = new RegExp(query, "i");
-    if (category) filter.category = category;
     if (color) filter.color = color;
-    if (brand) filter.brand = brand;
     if (ram) filter.ram = ram;
     if (cpu) filter.cpu = cpu;
     if (hardDrive) filter.hardDrive = hardDrive;
@@ -66,12 +66,26 @@ export const getProducts = async (req, res) => {
         $lte: parseInt(maxPrice),
       };
     }
+
+    if (category) {
+      const categoryDoc = await Category.findOne({ name: category });
+      if (categoryDoc) filter.category = categoryDoc._id;
+    }
+    if (brand) {
+      const brandDoc = await Brand.findOne({ name: brand });
+      if (brandDoc) filter.brand = brandDoc._id;
+    }
+
     const options = {
       page,
       limit,
       sort: {
         [sort]: order === "asc" ? 1 : -1,
       },
+      populate: [
+        { path: "category", select: "name" },
+        { path: "brand", select: "name" },
+      ],
     };
 
     const products = await Product.paginate(filter, options);
@@ -82,16 +96,18 @@ export const getProducts = async (req, res) => {
 
     return res.status(200).json(products);
   } catch (error) {
-    console.log("Error in send getAllProducts controller", error.message);
+    console.log("Error in getProducts controller", error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
 export const getProductDetail = async (req, res) => {
-  try {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    const product = await Product.findById(id);
+  try {
+    const product = await Product.findById(id)
+      .populate({ path: "category", select: "name" })
+      .populate({ path: "brand", select: "name" });
 
     if (!product) {
       return res.status(404).json({ error: "Product not found" });
@@ -100,7 +116,7 @@ export const getProductDetail = async (req, res) => {
     return res.status(200).json(product);
   } catch (error) {
     console.log("Error in send getProductDetail controller", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 

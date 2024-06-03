@@ -8,8 +8,6 @@ import JoditEditor from "jodit-react";
 import FieldInput from "../components/FieldInput";
 import FieldTexarea from "../components/FieldTexarea";
 import {
-  LAPTOP_BRANDS,
-  LAPTOP_CATEGORIES,
   LAPTOP_COLORS,
   LAPTOP_CPUS,
   LAPTOP_GRAPHIC_CARDS,
@@ -24,6 +22,8 @@ import UploadProductImages from "../components/UploadProductImages";
 import { useParams } from "react-router-dom";
 import useGetProductDetail from "../hooks/useGetProductDetail";
 import useUpdateProduct from "../hooks/useUpdateProduct";
+import useGetCategories from "../hooks/useGetCategories";
+import useGetBrands from "../hooks/useGetBrands";
 
 const UpdateProduct = () => {
   const { id: productId } = useParams();
@@ -46,6 +46,8 @@ const UpdateProduct = () => {
 
   const editor = useRef(null);
   const { product } = useGetProductDetail(productId);
+  const { categories } = useGetCategories();
+  const { brands } = useGetBrands();
 
   const {
     handleUploadImages,
@@ -75,9 +77,9 @@ const UpdateProduct = () => {
         stock: product?.stock,
       });
       setForm({
+        brand: product?.brand,
         category: product?.category,
         color: product?.color,
-        brand: product?.brand,
         rating: product?.rating,
         detail: product?.detail,
         operatingSystem: product?.operatingSystem,
@@ -146,36 +148,40 @@ const UpdateProduct = () => {
 
           <div>
             <h1 className="mb-2 font-semibold">Danh mục</h1>
-            <Select
-              className="capitalize"
-              size="lg"
-              label="Danh mục"
-              value={form.category}
-              onChange={(val) => setForm({ ...form, category: val })}
-            >
-              {LAPTOP_CATEGORIES.map((item) => (
-                <Option key={item} value={item}>
-                  {item}
-                </Option>
-              ))}
-            </Select>
+            {form.category && (
+              <Select
+                className="capitalize"
+                size="lg"
+                label="Danh mục"
+                value={form.category}
+                onChange={(val) => setForm({ ...form, category: val })}
+              >
+                {categories?.map((item) => (
+                  <Option key={item?.name} value={item?._id}>
+                    {item?.name}
+                  </Option>
+                ))}
+              </Select>
+            )}
           </div>
 
           <div>
             <h1 className="mb-2 font-semibold">Thương hiệu</h1>
-            <Select
-              className="capitalize"
-              size="lg"
-              label="Thương hiệu"
-              value={form.brand}
-              onChange={(val) => setForm({ ...form, brand: val })}
-            >
-              {LAPTOP_BRANDS.map((item) => (
-                <Option key={item} value={item}>
-                  {item}
-                </Option>
-              ))}
-            </Select>
+            {form.brand && (
+              <Select
+                className="capitalize"
+                size="lg"
+                label="Thương hiệu"
+                value={form.brand}
+                onChange={(val) => setForm({ ...form, brand: val })}
+              >
+                {brands?.map((item) => (
+                  <Option key={item?.name} value={item?._id}>
+                    {item?.name}
+                  </Option>
+                ))}
+              </Select>
+            )}
           </div>
 
           <div>
@@ -343,7 +349,8 @@ const UpdateProduct = () => {
 
           <Button
             disabled={loading}
-            color="blue"
+            color="red"
+            variant="gradient"
             className="w-full"
             size="lg"
             type="submit"
