@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
 import {
-  LAPTOP_BRANDS,
-  LAPTOP_CATEGORIES,
   LAPTOP_CPUS,
   LAPTOP_GRAPHIC_CARDS,
   LAPTOP_HARD_DRIVES,
@@ -15,6 +13,8 @@ import { GoSearch } from "react-icons/go";
 import useMegaFilterProduct from "../../../admin/src/hooks/useMegaFilterProduct";
 import ProductCard, { ProductCardSkeleton } from "../components/ProductCard";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+import useGetCategories from "../hooks/useGetCategories";
+import useGetBrands from "../hooks/useGetBrands";
 
 const Product = () => {
   const {
@@ -132,6 +132,9 @@ function Sidebar({
   priceFilter,
   setPriceFilter,
 }) {
+  const { categories } = useGetCategories();
+  const { brands } = useGetBrands();
+
   return (
     <aside className=" w-[300px]  border-r pr-3 border-gray-300">
       <div className="flex items-center justify-between mb-3">
@@ -156,17 +159,9 @@ function Sidebar({
                   color="red"
                   name="price"
                   label={item.label}
-                  value={{
-                    minPrice: item.minNum,
-                    maxPrice: item.maxNum,
-                  }}
-                  onChange={() =>
-                    setPriceFilter({
-                      ...priceFilter,
-                      minPrice: item.minNum,
-                      maxPrice: item.maxNum,
-                    })
-                  }
+                  value={item}
+                  checked={priceFilter.label === item.label}
+                  onChange={() => setPriceFilter(item)}
                 />
               </li>
             ))}
@@ -176,14 +171,17 @@ function Sidebar({
         <div>
           <h1 className="font-semibold mb-2 text-lg">Hãng sản xuất</h1>
           <ul className="grid grid-cols-2">
-            {LAPTOP_BRANDS.map((item) => (
-              <li key={item}>
+            {brands?.map((item) => (
+              <li key={item?._id}>
                 <Radio
                   color="red"
                   name="brand"
-                  label={item}
-                  value={item}
-                  onChange={() => setFilter({ ...filter, brand: item })}
+                  label={item?.name}
+                  value={item?.name}
+                  checked={filter.brand === item?.name}
+                  onChange={(e) =>
+                    setFilter({ ...filter, brand: e.target.value })
+                  }
                 />
               </li>
             ))}
@@ -193,14 +191,17 @@ function Sidebar({
         <div>
           <h1 className="font-semibold mb-2 text-lg">Nhu cầu sử dụng</h1>
           <ul>
-            {LAPTOP_CATEGORIES.map((item) => (
-              <li key={item}>
+            {categories?.map((item) => (
+              <li key={item?._id}>
                 <Radio
                   color="red"
                   name="category"
-                  label={item}
-                  value={item}
-                  onChange={() => setFilter({ ...filter, category: item })}
+                  label={item?.name}
+                  value={item?.name}
+                  checked={filter.category === item?.name}
+                  onChange={(e) =>
+                    setFilter({ ...filter, category: e.target.value })
+                  }
                 />
               </li>
             ))}
@@ -217,6 +218,7 @@ function Sidebar({
                   name="ram"
                   label={item}
                   value={item}
+                  checked={filter.ram === item}
                   onChange={() => setFilter({ ...filter, ram: item })}
                 />
               </li>
@@ -234,6 +236,7 @@ function Sidebar({
                   name="cpu"
                   label={item}
                   value={item}
+                  checked={filter.hardDrive === item}
                   onChange={() => setFilter({ ...filter, hardDrive: item })}
                 />
               </li>
@@ -251,6 +254,7 @@ function Sidebar({
                   name="graphicCard"
                   label={item}
                   value={item}
+                  checked={filter.graphicCard === item}
                   onChange={() => setFilter({ ...filter, graphicCard: item })}
                 />
               </li>
@@ -268,6 +272,7 @@ function Sidebar({
                   name="screen"
                   label={item}
                   value={item}
+                  checked={filter.screen === item}
                   onChange={() => setFilter({ ...filter, screen: item })}
                 />
               </li>
@@ -285,6 +290,7 @@ function Sidebar({
                   name="cpu"
                   label={item}
                   value={item}
+                  checked={filter.cpu === item}
                   onChange={() => setFilter({ ...filter, cpu: item })}
                 />
               </li>

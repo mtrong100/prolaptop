@@ -21,7 +21,6 @@ const ProductDetail = () => {
   const [selectedImage, setSelectedImage] = useState("");
   const [quantity, setQuantity] = useState(1);
   const { product } = useGetProductDetail(productId);
-  console.log("🚀 ~ ProductDetail ~ product:", product);
   const { relatedProducts, isLoading } = useGetRelatedProducts(product?.brand);
   const { handleToggleFavorite, userWishlist } = useFavorite();
 
@@ -98,13 +97,22 @@ const ProductDetail = () => {
 
         {/* RIGHT */}
         <div className="space-y-5">
-          <Chip
-            size="lg"
-            color="red"
-            variant="ghost"
-            value={product?.category || ""}
-            className="w-fit"
-          />
+          <div className="flex items-center gap-3">
+            <Chip
+              size="lg"
+              color="red"
+              variant="ghost"
+              value={product?.category?.name || ""}
+              className="w-fit"
+            />
+            <Chip
+              size="lg"
+              color="blue"
+              variant="ghost"
+              value={product?.brand?.name || ""}
+              className="w-fit rounded-full"
+            />
+          </div>
 
           <Typography className="font-medium text-2xl ">
             {product?.name || ""}

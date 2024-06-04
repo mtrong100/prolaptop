@@ -91,14 +91,14 @@ const ProductCard = ({ p }) => {
           <Chip
             size="sm"
             variant="ghost"
-            value={p?.category}
+            value={p?.category?.name}
             className="w-fit"
           />
           <Chip
             size="sm"
             variant="gradient"
             color="red"
-            value={p?.brand}
+            value={p?.brand?.name}
             className="w-fit rounded-full"
           />
         </div>

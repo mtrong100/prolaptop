@@ -7,8 +7,9 @@ export default function useMegaFilterProduct() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [priceFilter, setPriceFilter] = useState({
-    minPrice: undefined,
-    maxPrice: undefined,
+    label: "",
+    minPrice: "",
+    maxPrice: "",
   });
   const [filter, setFilter] = useState({
     query: "",
@@ -79,7 +80,23 @@ export default function useMegaFilterProduct() {
   }, [filter, paginate.currentPage, priceFilter, searchQuery]);
 
   const handleResetFilter = () => {
-    window.location.reload();
+    setFilter({
+      query: "",
+      brand: "",
+      category: "",
+      ram: "",
+      cpu: "",
+      hardDrive: "",
+      graphicCard: "",
+      screen: "",
+      color: "",
+      order: "",
+    });
+    setPriceFilter({
+      label: "",
+      minPrice: "",
+      maxPrice: "",
+    });
   };
 
   const handleNextPage = () => {

@@ -9,7 +9,13 @@ import useFavorite from "../hooks/useFavorite";
 import Empty from "../components/Empty";
 import CustomSwiper from "../components/CustomSwiper";
 
-const TABLE_HEAD = ["Sản phẩm", "Giá tiền", "Danh mục", "Thao tác"];
+const TABLE_HEAD = [
+  "Sản phẩm",
+  "Giá tiền",
+  "Hãng sản xuất",
+  "Danh mục",
+  "Thao tác",
+];
 
 const Wishlist = () => {
   const { userWishlist } = useWishlist();
@@ -116,7 +122,16 @@ export function TableWithStripedRows({ data = [], onRemoveFavorite }) {
               <td className="p-4">
                 <Chip
                   variant="ghost"
-                  value={item?.category}
+                  color="blue"
+                  value={item?.brand?.name}
+                  className="w-fit"
+                  size="md"
+                />
+              </td>
+              <td className="p-4">
+                <Chip
+                  variant="ghost"
+                  value={item?.category?.name}
                   className="w-fit"
                   size="md"
                 />
@@ -124,7 +139,7 @@ export function TableWithStripedRows({ data = [], onRemoveFavorite }) {
               <td className="p-4">
                 <Button
                   color="red"
-                  variant="outlined"
+                  variant="gradient"
                   onClick={() => onRemoveFavorite(item?._id)}
                 >
                   Xóa

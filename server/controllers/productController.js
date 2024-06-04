@@ -236,10 +236,14 @@ export const setProductFlashSale = async (req, res) => {
 
 export const getFlashsale = async (req, res) => {
   try {
-    const flashsaleProducts = await Product.find({ flashSale: true });
-    res.status(200).json(flashsaleProducts);
+    const flashsaleProducts = await Product.find({ flashSale: true }).populate([
+      { path: "category", select: "name" },
+      { path: "brand", select: "name" },
+    ]);
+
+    return res.status(200).json(flashsaleProducts);
   } catch (error) {
     console.error("Error in getFlashsale controller", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };

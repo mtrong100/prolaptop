@@ -5,9 +5,13 @@ export const getUserWishlist = async (req, res) => {
   try {
     const userId = req.params.userId;
 
-    const userWishlist = await Wishlist.find({ user: userId }).populate(
-      "product"
-    );
+    const userWishlist = await Wishlist.find({ user: userId }).populate({
+      path: "product",
+      populate: [
+        { path: "brand", select: "name" },
+        { path: "category", select: "name" },
+      ],
+    });
 
     const wishlistProducts = userWishlist.map((favorite) => favorite.product);
 
