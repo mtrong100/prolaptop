@@ -7,40 +7,18 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import useGetCategories from "../../hooks/useGetCategories";
 
-const CategoryStatistic = ({ results = [] }) => {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    // Calculate product counts per category
-    const categoryCounts = {};
-    results.forEach((product) => {
-      const categoryName = product.category;
-      if (categoryCounts[categoryName]) {
-        categoryCounts[categoryName] += 1;
-      } else {
-        categoryCounts[categoryName] = 1;
-      }
-    });
-
-    // Format the data for the chart
-    const formattedData = Object.entries(categoryCounts).map(
-      ([category, count]) => ({
-        category,
-        count,
-      })
-    );
-
-    setData(formattedData);
-  }, [results]);
+const CategoryStatistic = () => {
+  const { categories } = useGetCategories();
 
   return (
     <ResponsiveContainer width="100%" height={300}>
-      <BarChart data={data}>
-        <XAxis dataKey="category" />
-        <YAxis />
+      <BarChart data={categories}>
+        <XAxis dataKey="name" />
+        <YAxis dataKey="productCount" />
         <Tooltip />
-        <Bar dataKey="count" fill="#8884d8" />
+        <Bar dataKey="productCount" fill="#B3E2A7" />
       </BarChart>
     </ResponsiveContainer>
   );

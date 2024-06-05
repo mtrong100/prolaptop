@@ -8,6 +8,7 @@ import useCaculateTotalRevenue from "../hooks/useCaculateTotalRevenue";
 import useGetCollectionApi from "../hooks/useGetCollectionApi";
 import MonthlyRevenueChart from "../components/charts/MonthlyRevenueChart";
 import CategoryStatistic from "../components/charts/CategogryStastistic";
+import CategoryPieChart from "../components/charts/CategoryPieChart";
 
 const Dashboard = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -58,7 +59,7 @@ const Dashboard = () => {
           <h1 className="text-2xl font-bold text-blue-gray-700">
             Thống kê danh mục hàng hóa
           </h1>
-          <CategoryStatistic results={products} />
+          <CategoryPieChart />
         </div>
       </div>
     </div>

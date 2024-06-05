@@ -80,7 +80,7 @@ const MonthlyRevenueChart = () => {
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="month" />
         <YAxis />
-        <Tooltip />
+        <Tooltip dataKey="revenue" />
         <Legend />
         <Bar dataKey="revenue" fill="#8884d8" />
       </BarChart>
