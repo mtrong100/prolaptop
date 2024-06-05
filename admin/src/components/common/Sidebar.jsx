@@ -15,7 +15,6 @@ import { IoMdLogOut } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { SIDEBAR_LINKS } from "../../utils/constants";
 import { FiMessageCircle } from "react-icons/fi";
-import { IoStatsChartOutline } from "react-icons/io5";
 
 const Sidebar = () => {
   const navigate = useNavigate();

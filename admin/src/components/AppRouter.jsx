@@ -18,6 +18,7 @@ const OrderDetail = lazy(() => import("../pages/OrderDetail"));
 const Statistic = lazy(() => import("../pages/Statistic"));
 const AdminLogin = lazy(() => import("../pages/AdminLogin"));
 const ProductDetail = lazy(() => import("../pages/ProductDetail"));
+const ManageBrand = lazy(() => import("../pages/ManageBrand"));
 
 const adminRoutes = [
   { path: "/", element: <Dashboard /> },
@@ -25,6 +26,7 @@ const adminRoutes = [
   { path: "/admin/manage-order", element: <ManageOrder /> },
   { path: "/admin/manage-user", element: <ManageUser /> },
   { path: "/admin/manage-category", element: <ManageCategory /> },
+  { path: "/admin/manage-brand", element: <ManageBrand /> },
   { path: "/admin/manage-couponcode", element: <ManageCouponCode /> },
   { path: "/admin/manage-review", element: <ManageReview /> },
   { path: "/admin/add-product", element: <AddProduct /> },

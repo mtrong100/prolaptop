@@ -6,6 +6,7 @@ import {
   MdOutlineRateReview,
 } from "react-icons/md";
 import { RiCoupon3Line } from "react-icons/ri";
+import { TbBrandBumble } from "react-icons/tb";
 
 export const ADMIN_ID = "6646b7a84820f311fdc99db8";
 
@@ -85,6 +86,17 @@ export const SIDEBAR_LINKS = [
       {
         text: "Quản lí",
         navigateTo: "/admin/manage-category",
+        prefixIcon: <MdManageSearch size={25} />,
+      },
+    ],
+  },
+  {
+    title: "Thương hiệu",
+    icon: <TbBrandBumble size={20} />,
+    items: [
+      {
+        text: "Quản lí",
+        navigateTo: "/admin/manage-brand",
         prefixIcon: <MdManageSearch size={25} />,
       },
     ],

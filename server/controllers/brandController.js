@@ -1,8 +1,27 @@
 import Brand from "../models/brandModel.js";
+import Product from "../models/productModel.js";
 
 export const getBrands = async (req, res) => {
   try {
-    const brands = await Brand.find({}).sort({ createdAt: -1 });
+    const brands = await Brand.aggregate([
+      {
+        $lookup: {
+          from: "products",
+          localField: "_id",
+          foreignField: "brand",
+          as: "products",
+        },
+      },
+      {
+        $project: {
+          name: 1,
+          createdAt: 1,
+          productCount: { $size: "$products" },
+        },
+      },
+      { $sort: { createdAt: -1 } },
+    ]);
+
     return res.status(200).json(brands);
   } catch (error) {
     console.log("Error in getBrands controller: ", error);
@@ -14,7 +33,7 @@ export const createBrand = async (req, res) => {
   const userRole = req.user.role;
   const { name } = req.body;
 
-try {
+  try {
     if (userRole !== "admin") {
       return res.status(403).json({ error: "Không có ủy quyền" });
     }
@@ -65,6 +84,15 @@ export const deleteBrand = async (req, res) => {
   try {
     if (userRole !== "admin") {
       return res.status(403).json({ error: "Không có ủy quyền" });
+    }
+
+    // Check if there are products in the brand
+    const productCount = await Product.countDocuments({ brand: id });
+
+    if (productCount > 0) {
+      return res
+        .status(400)
+        .json({ error: "Không thể xóa thương hiệu đã có sản phẩm" });
     }
 
     const deletedBrand = await Brand.findByIdAndDelete(id);

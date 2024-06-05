@@ -3,7 +3,6 @@ import {
   addNewCategory,
   deleteCategory,
   getCategories,
-  getCategoryDetail,
   updateCategory,
 } from "../controllers/categoryController.js";
 import { protectedRoute } from "../middlewares/protectedRoute.js";
@@ -11,8 +10,6 @@ import { protectedRoute } from "../middlewares/protectedRoute.js";
 const router = express.Router();
 
 router.get("/categories", getCategories);
-
-router.get("/id", getCategoryDetail);
 
 router.post("/add-new", protectedRoute, addNewCategory);
 

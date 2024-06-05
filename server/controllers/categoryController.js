@@ -24,18 +24,8 @@ export const getCategories = async (req, res) => {
 
     return res.status(200).json(categories);
   } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
     console.log("Error in getCategories controller: ", error);
-  }
-};
-export const getCategoryDetail = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const category = await Category.findById(id);
-    return res.status(200).json(category);
-  } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
-    console.log("Error in getCategories controller: ", error);
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 
