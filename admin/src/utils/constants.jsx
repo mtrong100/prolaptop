@@ -78,17 +78,17 @@ export const SIDEBAR_LINKS = [
       },
     ],
   },
-  // {
-  //   title: "Danh mục",
-  //   icon: <MdOutlineCategory size={20} />,
-  //   items: [
-  //     {
-  //       text: "Quản lí",
-  //       navigateTo: "/admin/manage-category",
-  //       prefixIcon: <MdManageSearch size={25} />,
-  //     },
-  //   ],
-  // },
+  {
+    title: "Danh mục",
+    icon: <MdOutlineCategory size={20} />,
+    items: [
+      {
+        text: "Quản lí",
+        navigateTo: "/admin/manage-category",
+        prefixIcon: <MdManageSearch size={25} />,
+      },
+    ],
+  },
   {
     title: "Mã giảm giá",
     icon: <RiCoupon3Line size={20} />,

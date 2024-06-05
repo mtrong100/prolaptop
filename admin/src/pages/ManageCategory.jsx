@@ -1,77 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import TitleSection from "../components/TitleSection";
 import {
   Input,
   Button,
-  Card,
   Typography,
   IconButton,
   Dialog,
   DialogHeader,
   DialogBody,
   DialogFooter,
+  Chip,
 } from "@material-tailwind/react";
 import { formatDate } from "../utils/helper";
 import { MdDelete, MdOutlineEdit } from "react-icons/md";
-import {
-  addNewCategoryApi,
-  deleteCategoryApi,
-  getCategoriesApi,
-  updateCategoryApi,
-} from "../api/catgegoryApi";
-import { toast } from "react-toastify";
 import { IoSearchOutline } from "react-icons/io5";
+import useManageCategory from "../hooks/useManageCategory";
 
-const TABLE_HEAD = ["ID", "Tên", "Ngày thêm", "Thao tác"];
+const TABLE_HEAD = ["ID", "Tên", "Tổng sản phẩm", "Ngày thêm", "Thao tác"];
 
 const ManageCategory = () => {
-  const [val, setVal] = useState("");
-  const [categories, setCategories] = useState([]);
-  const [isAdding, setIsAdding] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [query, setQuery] = useState("");
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  async function fetchCategories() {
-    setLoading(true);
-    try {
-      const res = await getCategoriesApi();
-      setCategories(res);
-    } catch (error) {
-      setLoading(false);
-      console.log("Lỗi fetch data danh mục: ", error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  const handleAddNewCategory = async () => {
-    if (!val.trim()) {
-      toast.error("Danh mục không được để trống");
-      return;
-    }
-
-    setIsAdding(true);
-
-    try {
-      const res = await addNewCategoryApi({ name: val });
-      setCategories((prevCategories) => [...prevCategories, res]);
-      setVal("");
-      toast.success("Thêm mới danh mục hoàn tất");
-    } catch (error) {
-      toast.error("Lỗi thêm mới danh mục");
-      console.log("Lỗi thêm mới danh mục: ", error);
-    } finally {
-      setIsAdding(false);
-    }
-  };
-
-  const filterCategories = categories.filter((item) =>
-    item.name.toLowerCase().includes(query.toLowerCase())
-  );
+  const {
+    isAdding,
+    isUpdating,
+    query,
+    setQuery,
+    val,
+    setVal,
+    updateVal,
+    setUpdateVal,
+    open,
+    filterCategories,
+    handleAddNewCategory,
+    handleDeleteCategory,
+    handleUpdateCategory,
+    handleOpenDialog,
+    handleOpen,
+  } = useManageCategory();
 
   return (
     <div>
@@ -81,179 +45,123 @@ const ManageCategory = () => {
         <div className=" w-full max-w-[450px] flex items-center gap-1">
           <Input
             size="lg"
-            color="blue"
+            color="red"
             label="Danh mục"
             value={val}
             onChange={(e) => setVal(e.target.value)}
           />
           <Button
-            color="blue"
+            color="red"
             type="submit"
             disabled={isAdding}
             onClick={handleAddNewCategory}
             className="w-[180px] h-[44px] flex items-center justify-center"
           >
-            {isAdding ? "Loading..." : "Thêm mới"}
+            {isAdding ? "Đang chờ..." : "Thêm mới"}
           </Button>
         </div>
 
         <div className="flex items-center gap-1 w-full max-w-xs">
           <Input
             size="lg"
-            color="blue"
+            color="red"
             label="Tìm kiếm"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="w-full"
           />
-          <IconButton size="md" className="flex-shrink-0 h-[44px]">
+          <IconButton color="red" size="md" className="flex-shrink-0 h-[44px]">
             <IoSearchOutline size={20} color="white" />
           </IconButton>
         </div>
       </div>
 
       <div className="mt-8">
-        <TableWithStripedRows
-          categories={filterCategories}
-          setCategories={setCategories}
-        />
-      </div>
-    </div>
-  );
-};
-
-export default ManageCategory;
-
-export function TableWithStripedRows({ categories = [], setCategories }) {
-  const handleDeleteCategory = async (categoryId) => {
-    try {
-      await deleteCategoryApi(categoryId);
-      const res = await getCategoriesApi();
-      setCategories(res);
-      toast.success("Xóa danh mục hoàn tất");
-    } catch (error) {
-      toast.error("Lỗi xóa danh mục");
-      console.log("Lỗi xóa danh mục: ", error);
-    }
-  };
-
-  return (
-    <Card className="h-full w-full overflow-scroll">
-      <table className="w-full min-w-max table-auto text-left">
-        <thead>
-          <tr>
-            {TABLE_HEAD.map((head) => (
-              <th
-                key={head}
-                className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
-              >
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="font-normal leading-none opacity-70"
-                >
-                  {head}
-                </Typography>
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {categories.map((item) => {
-            return (
-              <tr key={item?._id} className="even:bg-blue-gray-50/50">
-                <td className="p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
+        <div className="h-full w-full overflow-scroll">
+          <table className="w-full min-w-max table-auto text-left">
+            <thead>
+              <tr>
+                {TABLE_HEAD.map((head) => (
+                  <th
+                    key={head}
+                    className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
                   >
-                    {item?._id}
-                  </Typography>
-                </td>
-                <td className="p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {item?.name}
-                  </Typography>
-                </td>
-                <td className="p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {formatDate(item?.createdAt)}
-                  </Typography>
-                </td>
-                <td className="p-4">
-                  <div className="flex items-center gap-3">
-                    <UpdateModal
-                      category={item}
-                      setCategories={setCategories}
-                    />
-                    <IconButton
-                      color="red"
-                      size="md"
-                      onClick={() => handleDeleteCategory(item?._id)}
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal leading-none opacity-70"
                     >
-                      <MdDelete size={20} color="white" />
-                    </IconButton>
-                  </div>
-                </td>
+                      {head}
+                    </Typography>
+                  </th>
+                ))}
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </Card>
-  );
-}
+            </thead>
+            <tbody>
+              {filterCategories.map((item) => {
+                return (
+                  <tr key={item?._id} className="even:bg-blue-gray-50/50">
+                    <td className="p-4">
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {item?._id}
+                      </Typography>
+                    </td>
+                    <td className="p-4">
+                      <Chip
+                        value={item?.name || ""}
+                        size="sm"
+                        variant="ghost"
+                        className="w-fit"
+                      />
+                    </td>
+                    <td className="p-4">
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {item?.productCount}
+                      </Typography>
+                    </td>
+                    <td className="p-4">
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {formatDate(item?.createdAt)}
+                      </Typography>
+                    </td>
+                    <td className="p-4">
+                      <div className="flex items-center gap-3">
+                        <IconButton
+                          onClick={() => handleOpenDialog(item)}
+                          color="green"
+                          size="md"
+                        >
+                          <MdOutlineEdit size={20} color="white" />
+                        </IconButton>
+                        <IconButton
+                          color="red"
+                          size="md"
+                          onClick={() => handleDeleteCategory(item?._id)}
+                        >
+                          <MdDelete size={20} color="white" />
+                        </IconButton>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-const UpdateModal = ({ category, setCategories }) => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(!open);
-  const [val, setVal] = useState("");
-  const [isUpdating, setIsUpdating] = useState(false);
-
-  useEffect(() => {
-    if (category) {
-      setVal(category?.name);
-    }
-  }, [category]);
-
-  const handleUpdateCategory = async () => {
-    if (!val.trim()) {
-      toast.error("Danh mục không được để trống");
-      return;
-    }
-
-    setIsUpdating(true);
-
-    try {
-      await updateCategoryApi(category?._id, { name: val });
-
-      const res = await getCategoriesApi();
-      setCategories(res);
-
-      toast.success("Cập nhật danh mục hoàn tất");
-    } catch (error) {
-      toast.error("Lỗi cập nhật danh mục");
-      console.log("Lỗi cập nhật danh mục: ", error);
-    } finally {
-      setIsUpdating(false);
-      handleOpen();
-    }
-  };
-
-  return (
-    <>
-      <IconButton onClick={handleOpen} color="green" size="md">
-        <MdOutlineEdit size={20} color="white" />
-      </IconButton>
       <Dialog open={open} size="sm">
         <DialogHeader className="text-xl">Cập nhật danh mục</DialogHeader>
         <DialogBody>
@@ -261,8 +169,10 @@ const UpdateModal = ({ category, setCategories }) => {
             size="lg"
             color="blue"
             label="Danh mục"
-            value={val}
-            onChange={(e) => setVal(e.target.value)}
+            value={updateVal.name}
+            onChange={(e) =>
+              setUpdateVal({ ...updateVal, name: e.target.value })
+            }
           />
         </DialogBody>
         <DialogFooter>
@@ -284,6 +194,8 @@ const UpdateModal = ({ category, setCategories }) => {
           </Button>
         </DialogFooter>
       </Dialog>
-    </>
+    </div>
   );
 };
+
+export default ManageCategory;

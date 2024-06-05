@@ -1,15 +1,33 @@
 import Category from "../models/categoryModel.js";
+import Product from "../models/productModel.js";
 
 export const getCategories = async (req, res) => {
   try {
-    const categories = await Category.find({}).sort({ createdAt: -1 });
+    const categories = await Category.aggregate([
+      {
+        $lookup: {
+          from: "products",
+          localField: "_id",
+          foreignField: "category",
+          as: "products",
+        },
+      },
+      {
+        $project: {
+          name: 1,
+          createdAt: 1,
+          productCount: { $size: "$products" },
+        },
+      },
+      { $sort: { createdAt: -1 } },
+    ]);
+
     return res.status(200).json(categories);
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
     console.log("Error in getCategories controller: ", error);
   }
 };
-
 export const getCategoryDetail = async (req, res) => {
   try {
     const { id } = req.params;
@@ -72,14 +90,22 @@ export const updateCategory = async (req, res) => {
 };
 
 export const deleteCategory = async (req, res) => {
-  try {
-    const userRole = req.user.role;
+  const userRole = req.user.role;
+  const { id } = req.params;
 
+  try {
     if (userRole !== "admin") {
       return res.status(403).json({ error: "Không có ủy quyền" });
     }
 
-    const { id } = req.params;
+    // Check if there are products in the category
+    const productCount = await Product.countDocuments({ category: id });
+
+    if (productCount > 0) {
+      return res
+        .status(400)
+        .json({ error: "Không thể xóa danh mục đã có sản phẩm" });
+    }
 
     const category = await Category.findByIdAndDelete(id);
 
@@ -89,7 +115,7 @@ export const deleteCategory = async (req, res) => {
 
     return res.status(200).json({ message: "Xóa danh mục hoàn tất" });
   } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error" });
     console.log("Error in deleteCategory controller: ", error);
   }
 };

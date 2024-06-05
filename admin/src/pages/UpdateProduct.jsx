@@ -77,8 +77,8 @@ const UpdateProduct = () => {
         stock: product?.stock,
       });
       setForm({
-        brand: product?.brand,
-        category: product?.category,
+        brand: product?.brand?._id,
+        category: product?.category?._id,
         color: product?.color,
         rating: product?.rating,
         detail: product?.detail,
