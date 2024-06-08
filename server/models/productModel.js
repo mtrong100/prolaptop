@@ -22,7 +22,7 @@ const productSchema = new mongoose.Schema(
       ref: "Brand",
       required: true,
     },
-    stock: { type: Number, required: true, min: 1 },
+    stock: { type: Number, required: true, min: 0 },
     operatingSystem: { type: String, required: true },
     ram: { type: String, required: true },
     screen: { type: String, required: true },
@@ -46,4 +46,3 @@ productSchema.plugin(mongoosePaginate);
 
 const Product = mongoose.model("Product", productSchema);
 export default Product;
-

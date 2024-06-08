@@ -168,11 +168,12 @@ const ProductDetail = () => {
             {product?.stock === 0 ? (
               <Button
                 disabled
-                variant="text"
+                variant="filled"
                 color="red"
+                size="lg"
                 className="w-full opacity-50 cursor-not-allowed"
               >
-                Out of stock
+                Sản phẩm hết hàng
               </Button>
             ) : (
               <Button

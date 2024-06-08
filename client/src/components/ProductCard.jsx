@@ -48,12 +48,18 @@ const ProductCard = ({ p }) => {
   return (
     <div className="group relative  border rounded-sm hover:shadow-md">
       <div className="relative overflow-hidden">
-        <div onClick={handleViewProduct} className="group">
+        <div onClick={handleViewProduct} className="group relative">
           <img
             className="w-full h-[276px] object-cover select-none group-hover:scale-110 transition-all duration-300"
             src={p?.thumbnail}
             alt={p?.name}
           />
+
+          {p?.stock === 0 && (
+            <div className="absolute pointer-events-none top-0 left-0 right-0 bottom-0 bg-black bg-opacity-60 flex justify-center  text-2xl items-center text-white font-semibold">
+              Sản phẩm hết hàng
+            </div>
+          )}
         </div>
 
         {isInWishlist ? (

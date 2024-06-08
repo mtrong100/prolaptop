@@ -183,18 +183,28 @@ export function TableWithStripedRows({ products = [], onSwitch, onDelete }) {
                   />
                 </td>
                 <td className="p-4">
-                  <Typography variant="small" color="red" className="font-bold">
+                  <Typography variant="lead" color="red" className="font-bold">
                     {formatCurrencyVND(item.discountPrice)}
                   </Typography>
                 </td>
-                <td className="p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {item?.stock}
-                  </Typography>
+                <td className="p-4 text-center">
+                  {item?.stock === 0 ? (
+                    <Chip
+                      value="Hết hàng"
+                      size="sm"
+                      color="amber"
+                      variant="gradient"
+                      className="w-fit"
+                    />
+                  ) : (
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                    >
+                      {item?.stock}
+                    </Typography>
+                  )}
                 </td>
                 <td className="p-4">
                   <Switch
