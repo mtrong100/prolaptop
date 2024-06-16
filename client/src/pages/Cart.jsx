@@ -33,6 +33,8 @@ const Cart = () => {
     (state) => state.cart
   );
 
+  console.log(cart);
+
   const subTotal = useMemo(() => {
     return cart.reduce((total, item) => {
       if (item.selected) {

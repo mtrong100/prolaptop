@@ -71,14 +71,22 @@ export const getProducts = async (req, res) => {
       const categoryDoc = await Category.findOne({ name: category });
       if (categoryDoc) filter.category = categoryDoc._id;
     }
+
     if (brand) {
       const brandDoc = await Brand.findOne({ name: brand });
       if (brandDoc) filter.brand = brandDoc._id;
     }
 
+    const pageInt = parseInt(page);
+    const limitInt = parseInt(limit);
+
+    const totalProducts = await Product.countDocuments(filter);
+    const totalPages = Math.ceil(totalProducts / limitInt);
+    const adjustedPage = pageInt > totalPages ? 1 : pageInt;
+
     const options = {
-      page,
-      limit,
+      page: adjustedPage,
+      limit: limitInt,
       sort: {
         [sort]: order === "asc" ? 1 : -1,
       },

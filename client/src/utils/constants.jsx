@@ -6,28 +6,28 @@ export const ADMIN_ID = "6646b7a84820f311fdc99db8";
 export const PRICES = [
   {
     label: "Dưới 10 triệu",
-    minNum: 0,
-    maxNum: 10000000,
+    minPrice: 0,
+    maxPrice: 10000000,
   },
   {
     label: "Từ 10 triệu đến 15 triệu",
-    minNum: 10000000,
-    maxNum: 15000000,
+    minPrice: 10000000,
+    maxPrice: 15000000,
   },
   {
     label: "Từ 15 triệu đến 20 triệu",
-    minNum: 15000000,
-    maxNum: 20000000,
+    minPrice: 15000000,
+    maxPrice: 20000000,
   },
   {
     label: "Từ 20 triệu đến 25 triệu",
-    minNum: 20000000,
-    maxNum: 25000000,
+    minPrice: 20000000,
+    maxPrice: 25000000,
   },
   {
     label: "Trên 25 triệu",
-    minNum: 25000000,
-    maxNum: 85000000,
+    minPrice: 25000000,
+    maxPrice: 85000000,
   },
 ];
 

@@ -47,11 +47,11 @@ const ProductDetail = () => {
       id: product?._id,
       name: product?.name,
       image: product?.thumbnail,
-      price: product?.price,
+      price: product?.discountPrice,
       quantity,
     };
     dispatch(addProductToCart(productData));
-    toast.success("Product added to your cart");
+    toast.success("Đã thêm sản phẩm vào giỏ hàng");
   };
 
   useEffect(() => {

@@ -106,17 +106,19 @@ const Product = () => {
               products.map((item) => <ProductCard key={item?._id} p={item} />)}
           </div>
 
-          <div className="mt-5 mb-10 flex items-center justify-end gap-4">
-            <IconButton onClick={handlePrevPage} size="md">
-              <MdChevronLeft size={25} color="white" />
-            </IconButton>
-            <div className="text-xl font-semibold opacity-60">
-              {paginate.currentPage}/{paginate.totalPages}
+          {paginate.totalDocs > 12 && (
+            <div className="mt-5 mb-10 flex items-center justify-end gap-4">
+              <IconButton onClick={handlePrevPage} size="md">
+                <MdChevronLeft size={25} color="white" />
+              </IconButton>
+              <div className="text-xl font-semibold opacity-60">
+                {paginate.currentPage}/{paginate.totalPages}
+              </div>
+              <IconButton onClick={handleNextPage} size="md">
+                <MdChevronRight size={25} color="white" />
+              </IconButton>
             </div>
-            <IconButton onClick={handleNextPage} size="md">
-              <MdChevronRight size={25} color="white" />
-            </IconButton>
-          </div>
+          )}
         </section>
       </div>
     </div>

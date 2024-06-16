@@ -97,6 +97,11 @@ export default function useMegaFilterProduct() {
       minPrice: "",
       maxPrice: "",
     });
+    setPaginate({
+      totalPages: 1,
+      currentPage: 1,
+      totalDocs: 0,
+    });
   };
 
   const handleNextPage = () => {
